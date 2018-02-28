@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+
+    <typeAliases>
+        <typeAlias alias="Hashtable" type="java.util.Hashtable"/>
+        <typeAlias alias="HashMap" type="java.util.HashMap"/>
+        <typeAlias alias="CategoryMapper" type="com.xingsu.digital3c.dao.CategoryMapper"/>
+    </typeAliases>
+
+    <mappers>
+        <mapper resource="com/xingsu/digital/mapper/CategoryMapper.xml"/>
+
+    </mappers>
+</configuration>
