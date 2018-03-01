@@ -8,6 +8,7 @@ import com.xingsu.digital3c.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,7 +22,7 @@ public class CategoryController {
     @Autowired
     private ICategoryService iCategoryService;
 
-    @RequestMapping("get_category.do")
+    @RequestMapping(value = "get_category.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse getChildrenParallelCategory(HttpSession session,@RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId){
 //        User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -31,13 +32,4 @@ public class CategoryController {
         return iCategoryService.getChildrenParallelCategory(categoryId);
     }
 
-    @RequestMapping("get_deep_category.do")
-    @ResponseBody
-    public ServerResponse getCategoryAndDeepChildrenCategory(HttpSession session,@RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId){
-//        User user = (User) session.getAttribute(Const.CURRENT_USER);
-//        if(user == null){
-//            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录");
-//        }
-        return iCategoryService.selectCategoryAndChildrenById(categoryId);
-    }
 }

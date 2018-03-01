@@ -10,7 +10,7 @@ $(function () {
         var str = "<nav class=\"navbar navbar-default\" role=\"navigation\">\n" +
             "        <div class=\"container-fluid\" style='background-color: #e3e4e5'>\n" +
             "            <div class=\"navbar-header\">\n" +
-            "                <a class=\"navbar-brand\" href=\"#\">3C数码</a>\n" +
+            "                <a class=\"navbar-brand\" href='/user/view/index.html'><span class=\"glyphicon glyphicon-home\">3C数码</a>\n" +
             "            </div>\n" +
             "            <div>\n" +
             "                <!--向右对齐-->\n" +

@@ -1,7 +1,9 @@
 package com.xingsu.digital3c.dao;
 
 import com.xingsu.digital3c.pojo.User;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
 

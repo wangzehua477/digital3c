@@ -16,6 +16,7 @@
 
     <mappers>
         <mapper resource="com/xingsu/digital/mapper/CategoryMapper.xml"/>
+        <mapper resource="com/xingsu/digital/mapper/ProductMapper.xml"/>
 
     </mappers>
 </configuration>

@@ -1,7 +1,12 @@
 package com.xingsu.digital3c.dao;
 
 import com.xingsu.digital3c.pojo.Product;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
+@Mapper
 public interface ProductMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +19,6 @@ public interface ProductMapper {
     int updateByPrimaryKeySelective(Product record);
 
     int updateByPrimaryKey(Product record);
+
+    List<Product> selectByCategoryIds(@Param("categoryIdList") List<Integer> categoryIdList, @Param("limit") Integer limit);
 }

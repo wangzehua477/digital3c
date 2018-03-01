@@ -1,7 +1,9 @@
 package com.xingsu.digital3c.dao;
 
 import com.xingsu.digital3c.pojo.Order;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface OrderMapper {
     int deleteByPrimaryKey(Integer id);
 
