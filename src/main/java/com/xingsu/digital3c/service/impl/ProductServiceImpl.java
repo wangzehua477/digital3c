@@ -2,6 +2,7 @@ package com.xingsu.digital3c.service.impl;
 
 
 import com.google.common.collect.Lists;
+import com.xingsu.digital3c.common.Const;
 import com.xingsu.digital3c.common.ResponseCode;
 import com.xingsu.digital3c.common.ServerResponse;
 import com.xingsu.digital3c.dao.CategoryMapper;
@@ -10,7 +11,9 @@ import com.xingsu.digital3c.pojo.Category;
 import com.xingsu.digital3c.pojo.Product;
 import com.xingsu.digital3c.service.ICategoryService;
 import com.xingsu.digital3c.service.IProductService;
+import com.xingsu.digital3c.util.DateTimeUtil;
 import com.xingsu.digital3c.util.PropertiesUtil;
+import com.xingsu.digital3c.vo.ProductDetailVo;
 import com.xingsu.digital3c.vo.ProductListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -75,6 +78,55 @@ public class ProductServiceImpl implements IProductService {
 
         return productListVo;
 
+    }
+
+
+    public ServerResponse<ProductDetailVo> getProductDetail(Integer productId) {
+        if (productId == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+
+        Product product = productMapper.selectByPrimaryKey(productId);
+        if (product == null) {
+            return ServerResponse.createByErrorMessage("产品已下架，或者已删除");
+        }
+
+        if (product.getStatus() != Const.ProductStatusEnum.ON_SALE.getCode()) {
+            return ServerResponse.createByErrorMessage("产品已下架，或者已删除");
+        }
+
+        ProductDetailVo productDetailVo = assembleProductDetailVo(product);
+        return ServerResponse.createBySuccess(productDetailVo);
+
+    }
+
+    private ProductDetailVo assembleProductDetailVo(Product product) {
+        ProductDetailVo productDetailVo = new ProductDetailVo();
+        productDetailVo.setId(product.getId());
+        productDetailVo.setSubtitle(product.getSubtitle());
+        productDetailVo.setPrice(product.getPrice());
+        productDetailVo.setMainImage(product.getMainImage());
+        productDetailVo.setSubImages(product.getSubImages());
+        productDetailVo.setCategoryId(product.getCategoryId());
+        productDetailVo.setDetail(product.getDetail());
+        productDetailVo.setName(product.getName());
+        productDetailVo.setStatus(product.getStatus());
+        productDetailVo.setStock(product.getStock());
+
+        productDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix", "ftp://localhost/"));
+
+        Category category = categoryMapper.selectByPrimaryKey(product.getCategoryId());
+        if (category == null) {
+            //默认根节点
+            productDetailVo.setParentCategoryId(0);
+        } else {
+            productDetailVo.setParentCategoryId(category.getParentId());
+        }
+
+        productDetailVo.setCreateTime(DateTimeUtil.dateToStr(product.getCreateTime()));
+        productDetailVo.setUpdateTime(DateTimeUtil.dateToStr(product.getUpdateTime()));
+
+        return productDetailVo;
     }
 
 }

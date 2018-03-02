@@ -1,9 +1,9 @@
 package com.xingsu.digital3c.controller.portal;
 
-import com.github.pagehelper.PageInfo;
 import com.xingsu.digital3c.common.ServerResponse;
 import com.xingsu.digital3c.service.IProductService;
 import com.xingsu.digital3c.util.PropertiesUtil;
+import com.xingsu.digital3c.vo.ProductDetailVo;
 import com.xingsu.digital3c.vo.ProductListVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -41,6 +40,17 @@ public class ProductController {
     public ServerResponse<List<ProductListVo>> list(@RequestParam(value = "categoryId") Integer categoryId,
                                                     @RequestParam(value = "limit", defaultValue = "4") Integer limit){
         return iProductService.getProductByCategory(categoryId, limit);
+    }
+
+    /**
+     * 商品详情
+     * @param productId
+     * @return
+     */
+    @RequestMapping("detail.do")
+    @ResponseBody
+    public ServerResponse<ProductDetailVo> detail(Integer productId){
+        return iProductService.getProductDetail(productId);
     }
 
     /**

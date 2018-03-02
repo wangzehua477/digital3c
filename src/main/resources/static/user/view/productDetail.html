@@ -44,8 +44,44 @@
             <a href="#"><span style="color: grey" id="mouseChangeColor2">商品详情</span></a>
         </div>
 
-        <div style="overflow: hidden">
+        <div style="overflow: hidden; margin-bottom: 20px">
+            <div style="width: 422px; height: 485px; float: left">
+                <img src="../../static/images/oppo_red_test.jpg" style="width: 420px; height: 400px; margin-bottom: 10px"/>
+                <ul style="padding: 0px">
+                    <li style="margin-right: 10px"><img src="../../static/images/oppo_red_test.jpg" style="width: 74px;height: 74px;"/></li>
+                    <li style="margin-right: 10px"><img src="../../static/images/huawei_test.jpg" style="width: 74px;height: 74px;"/></li>
+                    <li style="margin-right: 10px"><img src="../../static/images/huawei_test.jpg" style="width: 74px;height: 74px;"/></li>
+                    <li style="margin-right: 10px"><img src="../../static/images/huawei_test.jpg" style="width: 74px;height: 74px;"/></li>
+                    <li style="margin-right: 10px"><img src="../../static/images/huawei_test.jpg" style="width: 74px;height: 74px;"/></li>
+                </ul>
+            </div>
+            <div style="overflow: hidden;">
+                <h4 style="margin-left: 15px">Apple iPhone 7 Plus (A1661) 128G 玫瑰金色 移动联通电信4G手机</h4>
+                <h5 style="margin-left: 15px; color: red; margin-bottom: 25px">iPhone 7，现更以红色呈现。</h5>
+                <div style="overflow: hidden; width: 98%; height: 47px; line-height: 0px; margin:0 auto; background-color: #e3e4e5;">
+                    <p style="margin: 25px; color: grey">价格</p>
+                </div>
+                <div style="overflow: hidden; margin-left: 7px; margin-top: 15px">
+                    <p style="margin: 25px; color: grey; float: left">库存: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;15151</p>
+                </div>
+                <div style="overflow: hidden; margin-left: 7px">
+                    <p style="margin: 25px; color: grey; float: left">数量:</p>
+                    <input type="text" style="margin: 23px 0px 25px 0px; width: 45px"/>
+                </div>
+                <div style="margin: 25px;">
+                    <button type="button" class="btn btn-danger"><span style="font-size: large">加入购物车</span></button>
+                </div>
+            </div>
+        </div>
 
+        <div style="overflow: hidden; background-color: #e3e4e5; border-bottom: 1px solid #c60023">
+            <span style="font-size: 25px; color: white;background-color: #c60023; padding: 10px; ">商品详情</span>
+        </div>
+        <div style="margin-bottom: 80px">
+            <img src="../../static/images/huawei_test.jpg" style="width: 790px; height: auto;display:block; margin: 0 auto"/>
+            <img src="../../static/images/xiaomiNote3.jpg" style="width: 790px; height: auto;display:block; margin: 0 auto"/>
+            <img src="../../static/images/iphonex_test.jpg" style="width: 790px; height: auto;display:block; margin: 0 auto"/>
+            <img src="../../static/images/oppo_red_test.jpg" style="width: 790px; height: auto;display:block; margin: 0 auto"/>
         </div>
     </div>
 </div>
@@ -70,13 +106,14 @@
 
         init();
 
-//        var ajaxUrl = "../../product/listByCategoryId?categoryId="+categoryId;
-//        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
-//            if(!result.success){
-//                console.log(result);
-//                return;
-//            }
-//
+        var ajaxUrl = "../../product/detail.do?productId="+productId;
+        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
+            if(!result.success){
+                console.log(result);
+                return;
+            }
+            console.log(result);
+
 //            var productItemStrTemp = "";
 //            $.each(result.data, function (index, value) {
 //                var mainImage = "../../product/getImage?mainImageName=" + value.mainImage;
@@ -86,7 +123,7 @@
 //            });
 //            productList.sort(sortNumber)
 //            $("#productList").append(productItemStrTemp);
-//        });
+        });
 
         function init(){
             //鼠标移到的时候字显红色，移走恢复
