@@ -3,15 +3,25 @@
 <head>
     <meta charset="utf-8">
     <link href="../../static/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <title>3c数码电商平台</title>
+    <title>商品列表</title>
 </head>
 <body>
 <style>
     li{
         display:block;
         float:left;
-        width: 63px;
+        width: 73px;
         height: 24px;
+    }
+
+    .orderBy{
+        width: 85px;
+        height: 25px;
+        border: #ccc solid 1px;
+        text-align: center;
+        background-color: white;
+        cursor: pointer;
+        margin-bottom: 15px;
     }
 
 </style>
@@ -20,96 +30,23 @@
 
         <div id="nav"></div>
 
-        <div style="background-color: #5a8ce4; height:400px; overflow: hidden">
-            <div  id="navigation" style="width: 20%; float: left; overflow: hidden">
-                <div style="background-color: #5180d4; height: 30px">
-                    <span style="margin-left: 10%; line-height: 30px;color: #fff">3c商品分类</span>
-                </div>
-            </div>
-
-
-            <div style="width: 80%; float: right">
-                <div id="myCarousel" class="carousel slide">
-                    <!-- 轮播（Carousel）指标 -->
-                    <ol class="carousel-indicators">
-                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                        <li data-target="#myCarousel" data-slide-to="1"></li>
-                        <li data-target="#myCarousel" data-slide-to="2"></li>
-                    </ol>
-                    <!-- 轮播（Carousel）项目 -->
-                    <div class="carousel-inner">
-                        <div class="item active">
-                            <img style="width:100%; height: 400px" src="../../static/images/oppo_red_test.jpg">
-                        </div>
-                        <div class="item">
-                            <img style="width:100%; height: 400px" src="../../static/images/iphonex_test.jpg" >
-                        </div>
-                        <div class="item">
-                            <img style="width:100%; height: 400px" src="../../static/images/huawei_test.jpg">
-                        </div>
-                    </div>
-                    <!-- 轮播（Carousel）导航 -->
-                    <a class="carousel-control left" href="#myCarousel"
-                       data-slide="prev">&lsaquo;</a>
-                    <a class="carousel-control right" href="#myCarousel"
-                       data-slide="next">&rsaquo;</a>
-                </div>
-            </div>
+        <div id="searchForm" class="input-group" style="margin: 5px 100px 45px 100px;">
+            <span class="input-group-addon">3C数码</span>
+            <input type="text" class="form-control">
+            <span class="input-group-addon btn">搜索</span>
         </div>
 
-        <h3>3C 为你推荐 TODO 暂未实现</h3>
+        <hr style="border: red solid 1px"/>
 
-        <div class="row" style="background-color: #f0f0f0">
-            <div class="col-sm-6 col-md-3">
-                <div class="thumbnail" style="margin-top: 13px">
-                    <img style="width: 130px; height: 155px;margin-top: 12px" src="../../static/images/xiaomiNote3.jpg" alt="小米note3"/>
-                    <div class="caption" style="text-align: center">
-                        <p>小米note3 拍照美，拍人更美！</p>
-                        <p style="color:#ed2441; text-align: center">
-                            ￥1999
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3">
-                <div class="thumbnail" style="margin-top: 13px">
-                    <img style="width: 130px; height: 155px;margin-top: 12px" src="../../static/images/xiaomiNote3.jpg" alt="小米note3"/>
-                    <div class="caption" style="text-align: center">
-                        <p>小米note3 拍照美，拍人更美！</p>
-                        <p style="color:#ed2441; text-align: center">
-                            ￥1999
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3">
-                <div class="thumbnail" style="margin-top: 13px">
-                    <img style="width: 130px; height: 155px;margin-top: 12px" src="../../static/images/xiaomiNote3.jpg" alt="小米note3"/>
-                    <div class="caption" style="text-align: center">
-                        <p>小米note3 拍照美，拍人更美！</p>
-                        <p style="color:#ed2441; text-align: center">
-                            ￥1999
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3" id="1111111">
-                <div class="thumbnail" style="margin-top: 13px">
-                    <img style="width: 130px; height: 155px;margin-top: 12px" src="../../static/images/xiaomiNote3.jpg" alt="小米note3"/>
-                    <div class="caption" style="text-align: center">
-                        <p>小米note3 拍照美，拍人更美！</p>
-                        <p style="color:#ed2441; text-align: center">
-                            ￥1999
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <div style="margin-bottom: 25px">
+            <a href="index.html"><span style="color: grey" id="mouseChangeColor1">3CDigital</span></a>
+            <span style="color: grey">></span>
+            <a href="#"><span style="color: grey" id="mouseChangeColor2">商品详情</span></a>
         </div>
 
-        <div id="column">
+        <div style="overflow: hidden">
 
         </div>
-
     </div>
 </div>
 <script src="../../static/plugins/jQuery/jquery-1.12.1.min.js" type="text/javascript"></script>
@@ -118,91 +55,84 @@
 <script src="../../static/scripts/xingsu.ajax.auth.js" type="text/javascript"></script>
 <script src="../../static/scripts/xingsu.config.js" type="text/javascript"></script>
 <script src="../../static/scripts/xingsu.extensions.js" type="text/javascript"></script>
-
-
+<script src="../../static/scripts/xingsu.util.js" type="text/javascript"></script>
+<script src="../../static/plugins/layer/layer.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(function () {
+        var urlObject = $utils.parseUrl(location.href);
+        var productId = urlObject.params["productId"] || "null";
+//        if(productId == "null"){
+//            layer.alert("页面出错，请返回重试！");
+//            window.setTimeout(function () {
+//                location.href = "index.html";
+//            }, 3000);
+//        }
 
-        var $navigation = $("#navigation");             //导航索引div
-        var ajaxUrl = "../../category/get_category.do?categoryId=100001";
-        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
-            if(!result.success){
-                console.log(result);
-                return;
-            }
-            $.each(result.data, function (index, value) {
+        init();
 
-                //大分类 导航字符串 比如手机电脑通讯
-                var navigationStr = "<div style=\"overflow: hidden; margin: 7px 7px 10px 7px;\">\n" +
-                    "                <span style=\"color: #fff;\">{0}</span>\n" +
-                    "                <ul style=\"list-style-type:none;\">{1}</ul>\n" +
-                    "            </div>";
-                //具体子分类 比如华为小米oppo
-                var navigationStrItem = "<li ><span id='{1}' style='cursor: pointer; color: white'>{0}</span></li>";
+//        var ajaxUrl = "../../product/listByCategoryId?categoryId="+categoryId;
+//        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
+//            if(!result.success){
+//                console.log(result);
+//                return;
+//            }
+//
+//            var productItemStrTemp = "";
+//            $.each(result.data, function (index, value) {
+//                var mainImage = "../../product/getImage?mainImageName=" + value.mainImage;
+//                productItemStrTemp += String.format(productItemStr, mainImage, value.subtitle, value.price, value.id);
+//                productList.push(value);
+//                productListTemp.push(value);
+//            });
+//            productList.sort(sortNumber)
+//            $("#productList").append(productItemStrTemp);
+//        });
 
-                var temp = "";
-                var ajaxUrl2 = "../../category/get_category.do?categoryId=" + value.id;
-                $ajax.ajax(ajaxUrl2, null, $config.HttpVerbs.GET, function (result2) {
-                    if(!result2.success){
-                        console.log(result2);
-                        return;
-                    }
-                    $.each(result2.data, function (index2, value2) {
-                        temp += String.format(navigationStrItem, value2.name, value2.id);
-                    });
-
-                    navigationStr = String.format(navigationStr, value.name, temp);
-                    $navigation.append(navigationStr);
-
-                    $.each(result2.data, function (index2, value2) {
-                        $("#" + value2.id).click(function () {
-                            location.href = "itemDetail.html?categoryId=" + value2.id;
-                        });
-                    });
-
-                    columnFilling(++index, value.name, value.id);
-                }, {async: false});
+        function init(){
+            //鼠标移到的时候字显红色，移走恢复
+            mouseChangeColor("mouseChangeColor1");
+            mouseChangeColor("mouseChangeColor2");
+            $("#orderByDefault").css({
+                "background-color": "#c60023",
+                "color": "white",
+                "border": "#c60023 solid 1px"
+            });
+            $("#orderByDefault").click(function () {
+                $("#orderByDefault").css({
+                    "background-color": "#c60023",
+                    "color": "white",
+                    "border": "#c60023 solid 1px"
+                });
+                $("#orderByPrice").css({
+                    "background-color": "white",
+                    "color": "black",
+                    "border": "#ccc solid 1px"
+                });
+            });
+            $("#orderByPrice").click(function () {
+                $("#orderByPrice").css({
+                    "background-color": "#c60023",
+                    "color": "white",
+                    "border": "#c60023 solid 1px"
+                });
+                $("#orderByDefault").css({
+                    "background-color": "white",
+                    "color": "black",
+                    "border": "#ccc solid 1px"
+                });
 
             });
-
-        });
-
-        //1F 2F 3F 大分类专栏
-        function columnFilling(index, name, categoryId){
-            var column = "<div style=\"overflow: hidden\">\n" +
-                "            <h3>" + index + "F " + name + "<span style=\"float: right; font-size: small\"><a href='../../view/itemDetail?categoryId='"+ categoryId +">更多商品></a></span></p></h3>\n" +
-                "        </div>\n" +
-                "        <div id='columnItem' class=\"row\" style=\"background-color: #f0f0f0\">{1}</div>\n" +
-                "        </div>";
-            var columnItem = "<div class=\"col-sm-6 col-md-3\">\n" +
-                "                <div class=\"thumbnail\" style=\"margin-top: 13px\">\n" +
-                "                    <img style=\"width: 130px; height: 155px;margin-top: 12px\" src=\"{0}\"/>\n" +
-                "                    <div class=\"caption\" style=\"text-align: center\">\n" +
-                "                        <p>{1}</p>\n" +
-                "                        <p style=\"color:#ed2441; text-align: center\">\n" +
-                "                            ￥{2}\n" +
-                "                        </p>\n" +
-                "                    </div>\n" +
-                "                </div>\n" +
-                "            </div>";
-
-            ajaxUrl = "../../product/listByCategoryId?categoryId="+categoryId;
-            $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
-                if(!result.success){
-                    console.log(result);
-                    return;
-                }
-                var columnItemTemp="";
-                $.each(result.data, function (index, value) {
-                    var mainImage = "../../product/getImage?mainImageName=" + value.mainImage;
-                    columnItemTemp += String.format(columnItem, mainImage, value.subtitle, value.price);
-                });
-                var columnTemp = String.format(column, index, columnItemTemp);
-                $("#column").append(columnTemp);
-            }, {async: false});
-
         }
 
+        //鼠标移动到指定元素改变颜色，鼠标指针从元素上移开再次恢复颜色
+        function mouseChangeColor(id) {
+            $("#"+ id).mouseover(function () {
+                $("#"+ id).css("color", "red");
+            });
+            $("#" + id).mouseout(function(){
+                $("#"+ id).css("color","grey");
+            });
+        }
 
     });
 

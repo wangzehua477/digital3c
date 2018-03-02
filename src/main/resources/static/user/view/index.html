@@ -27,13 +27,13 @@
     </div>
 
     <div style="height:400px; overflow: hidden">
-        <div  id="navigation" class="col-lg-3" style="float: left; overflow: hidden; height: 400px; background-color: #5180d4;">
+        <div  id="navigation" class="col-lg-3 col-md-3 col-sm-3" style="float: left; overflow: hidden; height: 400px; background-color: #5180d4;">
             <span style="margin-left: 2%; line-height: 30px;color: #fff">3c商品分类</span>
 
         </div>
 
 
-        <div class="col-lg-9" style="float: right">
+        <div class="col-lg-9 col-md-9 col-sm-9" style="float: right">
             <div id="myCarousel" class="carousel slide">
                 <!-- 轮播（Carousel）指标 -->
                 <ol class="carousel-indicators">
@@ -161,7 +161,7 @@
 
                     $.each(result2.data, function (index2, value2) {
                         $("#" + value2.id).click(function () {
-                            location.href = "itemDetail.html?categoryId=" + value2.id;
+                            location.href = "itemList.html?categoryId=" + value2.id;
                         });
                     });
 
@@ -175,7 +175,7 @@
         //1F 2F 3F 大分类专栏
         function columnFilling(index, name, categoryId){
             var column = "<div style=\"overflow: hidden\">\n" +
-                "            <h3>" + index + "F " + name + "<span style=\"float: right; font-size: small\"><a href='../../view/itemDetail?categoryId='"+ categoryId +">更多商品></a></span></p></h3>\n" +
+                "            <h3>" + index + "F " + name + "<span style=\"float: right; font-size: small\"><a href='../../view/itemList?categoryId='"+ categoryId +">更多商品></a></span></p></h3>\n" +
                 "        </div>\n" +
                 "        <div id='columnItem' class=\"row\" style=\"background-color: #f0f0f0\">{1}</div>\n" +
                 "        </div>";

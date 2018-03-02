@@ -14,9 +14,11 @@ $(function () {
             "            </div>\n" +
             "            <div>\n" +
             "                <!--向右对齐-->\n" +
-            "                <p class=\"navbar-text navbar-right\" style='margin-right: 10px;'>我的订单</p>\n" +
-            "                <p class=\"navbar-text navbar-right\" style='margin-right: 10px;color: red;'>免费注册</p>\n" +
-            "                <p class=\"navbar-text navbar-right\">你好，请登录</p>\n" +
+            "                <p class=\"navbar-text navbar-right\" style='margin-right: 10px; cursor: pointer;'>我的3C</p>\n" +
+            "                <p class=\"navbar-text navbar-right\" style='margin-right: 10px; cursor: pointer;'>我的订单</p>\n" +
+            "                <p class=\"navbar-text navbar-right\" style='cursor: pointer'>购物车</p>\n" +
+            "                <p class=\"navbar-text navbar-right\" style='margin-right: 10px;color: red; cursor: pointer;'>免费注册</p>\n" +
+            "                <p class=\"navbar-text navbar-right\" style='cursor: pointer'>你好，请登录</p>\n" +
             "            </div>\n" +
             "        </div>\n" +
             "    </nav>";

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="../../static/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <title>商品列表</title>
+</head>
+<body>
+<style>
+    li{
+        display:block;
+        float:left;
+        width: 73px;
+        height: 24px;
+    }
+
+    .orderBy{
+        width: 85px;
+        height: 25px;
+        border: #ccc solid 1px;
+        text-align: center;
+        background-color: white;
+        cursor: pointer;
+        margin-bottom: 15px;
+    }
+
+</style>
+<div style="background-color: #f0f0f0">
+    <div class="container">
+
+        <div id="nav"></div>
+
+        <div id="searchForm" class="input-group" style="margin: 5px 100px 45px 100px;">
+            <span class="input-group-addon">3C数码</span>
+            <input type="text" class="form-control">
+            <span class="input-group-addon btn">搜索</span>
+        </div>
+
+        <hr style="border: red solid 1px"/>
+
+        <div style="margin-bottom: 25px">
+            <a href="index.html"><span style="color: grey" id="mouseChangeColor1">3CDigital</span></a>
+            <span style="color: grey">></span>
+            <a href="#"><span style="color: grey" id="mouseChangeColor2">商品列表</span></a>
+        </div>
+
+        <div style="overflow: hidden">
+            <ul style="padding-left: 0px">
+                <li id="orderByDefault" class="orderBy"><span>推荐排序</span></li>
+                <li id="orderByPrice" class="orderBy">
+                    <span style="margin-top: 0px">价格排序</span>
+                    <span id="sortArrow" style="width: 16px; height: 16px;margin-top: 0px;"></span>
+                </li>
+            </ul>
+        </div>
+
+        <div style="overflow: hidden">
+            <ul id="productList">
+                <li style="width: 18%; height: 300px;margin-right: 15px">
+                    <div class="thumbnail" style="margin-top: 13px; width: 100%">
+                        <img style="width: 130px; height: 155px;margin-top: 12px" src="../../static/images/xiaomiNote3.jpg" alt="小米note3"/>
+                        <div class="caption" style="text-align: center">
+                            <p>小米note3 拍照美，拍人更美！</p>
+                            <p style="color:#ed2441; text-align: center">
+                                ￥1999
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li style="width: 18%; height: 300px;margin-right: 15px">
+                    <div class="thumbnail" style="margin-top: 13px; width: 100%">
+                        <img style="width: 130px; height: 155px;margin-top: 12px" src="../../static/images/xiaomiNote3.jpg" alt="小米note3"/>
+                        <div class="caption" style="text-align: center">
+                            <p>小米note3 拍照美，拍人更美！</p>
+                            <p style="color:#ed2441; text-align: center">
+                                ￥1999
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li style="width: 18%; height: 300px;margin-right: 15px">
+                    <div class="thumbnail" style="margin-top: 13px; width: 100%">
+                        <img style="width: 130px; height: 155px;margin-top: 12px" src="../../static/images/xiaomiNote3.jpg" alt="小米note3"/>
+                        <div class="caption" style="text-align: center">
+                            <p>小米note3 拍照美，拍人更美！</p>
+                            <p style="color:#ed2441; text-align: center">
+                                ￥1999
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li style="width: 18%; height: 300px;margin-right: 15px">
+                    <div class="thumbnail" style="margin-top: 13px; width: 100%">
+                        <img style="width: 130px; height: 155px;margin-top: 12px" src="../../static/images/xiaomiNote3.jpg" alt="小米note3"/>
+                        <div class="caption" style="text-align: center">
+                            <p>小米note3 拍照美，拍人更美！</p>
+                            <p style="color:#ed2441; text-align: center">
+                                ￥1999
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script src="../../static/plugins/jQuery/jquery-1.12.1.min.js" type="text/javascript"></script>
+<script src="../../static/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.user.topnav.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.ajax.auth.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.config.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.extensions.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.util.js" type="text/javascript"></script>
+<script src="../../static/plugins/layer/layer.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        var urlObject = $utils.parseUrl(location.href);
+        var productList = [];
+        var productListTemp = [];
+        var categoryId = urlObject.params["categoryId"] || "null";
+        if(categoryId == "null"){
+            layer.alert("页面出错，请返回重试！");
+            window.setTimeout(function () {
+                location.href = "index.html";
+            }, 3000);
+        }
+
+        init();
+
+        var productItemStr ="<li style=\"width: 18%; height: 300px;margin-right: 15px\">\n" +
+            "                    <div class=\"thumbnail\" style=\"margin-top: 13px; width: 100%; cursor: pointer\">\n" +
+            "                       <a href='productDetail.html?productId={3}'>" +
+            "                           <img style=\"width: 130px; height: 155px;margin-top: 12px\" src=\"{0}\" />\n" +
+            "                           <div class=\"caption\" style=\"text-align: center\">\n" +
+            "                               <p>{1}</p>\n" +
+            "                               <p style=\"color:#ed2441; text-align: center\">\n" +
+            "                                   ￥{2}\n" +
+            "                               </p>\n" +
+            "                           </div>\n" +
+            "                       </a>\n" +
+            "                    </div>\n" +
+            "                </li>";
+        var ajaxUrl = "../../product/listByCategoryId?categoryId="+categoryId;
+        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
+            if(!result.success){
+                console.log(result);
+                return;
+            }
+
+            var productItemStrTemp = "";
+            $.each(result.data, function (index, value) {
+                var mainImage = "../../product/getImage?mainImageName=" + value.mainImage;
+                productItemStrTemp += String.format(productItemStr, mainImage, value.subtitle, value.price, value.id);
+                productList.push(value);
+                productListTemp.push(value);
+            });
+            productList.sort(sortNumber)
+            $("#productList").append(productItemStrTemp);
+        });
+
+        function sortNumber(a,b){
+            return a.price - b.price;
+        }
+
+        function init(){
+            //鼠标移到的时候字显红色，移走恢复
+            mouseChangeColor("mouseChangeColor1");
+            mouseChangeColor("mouseChangeColor2");
+            $("#orderByDefault").css({
+                "background-color": "#c60023",
+                "color": "white",
+                "border": "#c60023 solid 1px"
+            });
+            $("#orderByDefault").click(function () {
+                $("#orderByDefault").css({
+                    "background-color": "#c60023",
+                    "color": "white",
+                    "border": "#c60023 solid 1px"
+                });
+                $("#orderByPrice").css({
+                    "background-color": "white",
+                    "color": "black",
+                    "border": "#ccc solid 1px"
+                });
+                if($("#sortArrow").hasClass("glyphicon")){
+                    $("#sortArrow").removeClass("glyphicon-chevron-down");
+                    $("#sortArrow").removeClass("glyphicon-chevron-up");
+                    $("#sortArrow").removeClass("glyphicon");
+                }
+
+                //推荐的默认排序
+                var productItemStrTemp = "";
+                $("#productList").empty();
+                $.each(productListTemp, function (index, value) {
+                    var mainImage = "../../product/getImage?mainImageName=" + value.mainImage;
+                    productItemStrTemp = String.format(productItemStr, mainImage, value.subtitle, value.price, value.id);
+                    $("#productList").append(productItemStrTemp);
+                });
+            });
+            $("#orderByPrice").click(function () {
+                $("#orderByPrice").css({
+                    "background-color": "#c60023",
+                    "color": "white",
+                    "border": "#c60023 solid 1px"
+                });
+                $("#orderByDefault").css({
+                    "background-color": "white",
+                    "color": "black",
+                    "border": "#ccc solid 1px"
+                });
+
+                //判断排序的箭头
+                if($("#sortArrow").hasClass("glyphicon-chevron-down")){
+                    $("#sortArrow").removeClass("glyphicon-chevron-down");
+                    $("#sortArrow").addClass("glyphicon-chevron-up");
+
+                    //按照价格升序
+                    var productItemStrTemp = "";
+                    $("#productList").empty();
+                    $.each(productList, function (index, value) {
+                        var mainImage = "../../product/getImage?mainImageName=" + value.mainImage;
+                        productItemStrTemp = String.format(productItemStr, mainImage, value.subtitle, value.price, value.id);
+                        $("#productList").append(productItemStrTemp);
+                    });
+
+                }
+                else{
+                    $("#sortArrow").addClass("glyphicon");
+                    $("#sortArrow").addClass("glyphicon-chevron-down");
+
+                    //按照价格降序
+                    var productItemStrTemp = "";
+                    $("#productList").empty();
+                    $.each(productList, function (index, value) {
+                        var mainImage = "../../product/getImage?mainImageName=" + value.mainImage;
+                        productItemStrTemp = String.format(productItemStr, mainImage, value.subtitle, value.price, value.id);
+                        $("#productList").prepend(productItemStrTemp);
+                    });
+
+                }
+            });
+        }
+
+        //鼠标移动到指定元素改变颜色，鼠标指针从元素上移开再次恢复颜色
+        function mouseChangeColor(id) {
+            $("#"+ id).mouseover(function () {
+                $("#"+ id).css("color", "red");
+            });
+            $("#" + id).mouseout(function(){
+                $("#"+ id).css("color","grey");
+            });
+        }
+    });
+
+</script>
+</body>
+</html>
