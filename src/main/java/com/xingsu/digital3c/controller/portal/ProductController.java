@@ -58,9 +58,9 @@ public class ProductController {
      */
     @RequestMapping(value = "getImage", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<Resource> getImage(@RequestParam(value = "mainImageName") String mainImageName) {
+    public ResponseEntity<Resource> getImage(@RequestParam(value = "imageName") String imageName) {
         String filePath = PropertiesUtil.getProperty("ftp.imageDir");
-        String filename = mainImageName;
+        String filename = imageName;
         try {
             FileInputStream fs = new FileInputStream(filePath + "/" + filename);
             HttpHeaders headers = new HttpHeaders();

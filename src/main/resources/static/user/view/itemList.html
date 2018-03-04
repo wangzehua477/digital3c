@@ -149,7 +149,7 @@
 
             var productItemStrTemp = "";
             $.each(result.data, function (index, value) {
-                var mainImage = "../../product/getImage?mainImageName=" + value.mainImage;
+                var mainImage = "../../product/getImage?imageName=" + value.mainImage;
                 productItemStrTemp += String.format(productItemStr, mainImage, value.subtitle, value.price, value.id);
                 productList.push(value);
                 productListTemp.push(value);
@@ -192,7 +192,7 @@
                 var productItemStrTemp = "";
                 $("#productList").empty();
                 $.each(productListTemp, function (index, value) {
-                    var mainImage = "../../product/getImage?mainImageName=" + value.mainImage;
+                    var mainImage = "../../product/getImage?imageName=" + value.mainImage;
                     productItemStrTemp = String.format(productItemStr, mainImage, value.subtitle, value.price, value.id);
                     $("#productList").append(productItemStrTemp);
                 });
@@ -218,7 +218,7 @@
                     var productItemStrTemp = "";
                     $("#productList").empty();
                     $.each(productList, function (index, value) {
-                        var mainImage = "../../product/getImage?mainImageName=" + value.mainImage;
+                        var mainImage = "../../product/getImage?imageName=" + value.mainImage;
                         productItemStrTemp = String.format(productItemStr, mainImage, value.subtitle, value.price, value.id);
                         $("#productList").append(productItemStrTemp);
                     });
@@ -232,7 +232,7 @@
                     var productItemStrTemp = "";
                     $("#productList").empty();
                     $.each(productList, function (index, value) {
-                        var mainImage = "../../product/getImage?mainImageName=" + value.mainImage;
+                        var mainImage = "../../product/getImage?imageName=" + value.mainImage;
                         productItemStrTemp = String.format(productItemStr, mainImage, value.subtitle, value.price, value.id);
                         $("#productList").prepend(productItemStrTemp);
                     });

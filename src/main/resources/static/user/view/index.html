@@ -199,7 +199,7 @@
                 }
                 var columnItemTemp="";
                 $.each(result.data, function (index, value) {
-                    var mainImage = "../../product/getImage?mainImageName=" + value.mainImage;
+                    var mainImage = "../../product/getImage?imageName=" + value.mainImage;
                     columnItemTemp += String.format(columnItem, mainImage, value.subtitle, value.price);
                 });
                 var columnTemp = String.format(column, index, columnItemTemp);
