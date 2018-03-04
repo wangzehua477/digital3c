@@ -9,6 +9,8 @@ public class User {
 
     private String password;
 
+    private String salt;
+
     private String email;
 
     private String phone;
@@ -23,10 +25,11 @@ public class User {
 
     private Date updateTime;
 
-    public User(Integer id, String username, String password, String email, String phone, String question, String answer, Integer role, Date createTime, Date updateTime) {
+    public User(Integer id, String username, String password, String salt, String email, String phone, String question, String answer, Integer role, Date createTime, Date updateTime) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.salt = salt;
         this.email = email;
         this.phone = phone;
         this.question = question;
@@ -63,6 +66,15 @@ public class User {
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
     }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
 
     public String getEmail() {
         return email;

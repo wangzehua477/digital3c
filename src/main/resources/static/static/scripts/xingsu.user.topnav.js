@@ -18,9 +18,9 @@ $(function () {
             "                <p class=\"navbar-text navbar-right\" style='margin-right: 10px; cursor: pointer;'>我的订单</p>\n" +
             "                <p class=\"navbar-text navbar-right\" style='cursor: pointer'>购物车</p>\n" +
             "                <p class=\"navbar-text navbar-right\" style='margin-right: 10px;color: red; cursor: pointer;'>免费注册</p>\n" +
-            "                <p class=\"navbar-text navbar-right\" style='cursor: pointer'>你好，请登录</p>\n" +
+            "                <a href='login.html' class=\"navbar-text navbar-right\" style='cursor: pointer'>你好，请登录</a>\n" +
             "            </div>\n" +
             "        </div>\n" +
             "    </nav>";
-        $("#nav").html(str);
+        $("#topNav").html(str);
 });
