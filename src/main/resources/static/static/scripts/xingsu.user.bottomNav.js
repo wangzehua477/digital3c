@@ -7,7 +7,7 @@ $(function () {
 
 
 
-    var str = "<div class=\"panel-footer\">\n" +
+    var str = "<div class=\"panel-footer\" style='margin: 0 auto'>\n" +
         "                <div style=\"text-align: center;\">\n" +
         "                    <div>\n" +
         "                        <a  href=\"https://www.baidu.com\" target=\"_blank\">百度</a> |\n" +
@@ -15,8 +15,8 @@ $(function () {
         "                        <a  href=\"https://www.taobao.com\" target=\"_blank\">淘宝</a> |\n" +
         "                        <a  href=\"https://www.zhihu.com\" target=\"_blank\">知乎</a>\n" +
         "                    </div>\n" +
-        "                    <p class=\"glyphicon glyphicon-copyright-mark text-muted\">\n" +
-        "                        2018 digital3c.com All Right Reserved\n" +
+        "                    <p class=\"text-muted\">\n" +
+        "                        Copyright <span class='glyphicon glyphicon-copyright-mark'></span>2018 digital3c.com All Right Reserved\n" +
         "                    </p>\n" +
         "                </div>\n" +
         "            </div>";

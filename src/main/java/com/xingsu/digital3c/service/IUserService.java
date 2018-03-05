@@ -3,12 +3,13 @@ package com.xingsu.digital3c.service;
 
 import com.xingsu.digital3c.common.ServerResponse;
 import com.xingsu.digital3c.pojo.User;
+import com.xingsu.digital3c.pojo.request.LoginRequest;
 
 public interface IUserService {
 
     ServerResponse<User> login(String username, String password);
 
-    ServerResponse<String> register(User user);
+    ServerResponse<String> register(LoginRequest data);
 
     ServerResponse<String> checkValid(String str, String type);
 

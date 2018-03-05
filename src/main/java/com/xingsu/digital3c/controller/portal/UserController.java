@@ -8,12 +8,14 @@ import com.xingsu.digital3c.pojo.User;
 import com.xingsu.digital3c.pojo.request.LoginRequest;
 import com.xingsu.digital3c.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -54,13 +56,13 @@ public class UserController {
 
     /**
      * 注册
-     * @param user
+     * @param
      * @return
      */
     @RequestMapping(value = "register.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> register(User user){
-        return iUserService.register(user);
+    public ServerResponse<String> register(@RequestBody LoginRequest data){
+        return iUserService.register(data);
     }
 
     /**
