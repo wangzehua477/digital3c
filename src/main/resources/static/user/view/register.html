@@ -104,8 +104,8 @@
 
 <div class="container">
 
-    <div style="margin: 40px 20px">
-        <b style="font-size: large">3C 欢迎注册</b>
+    <div style="margin: 30px 20px">
+        <a href="index.html" style="font-size: large; color: #666"><span class='glyphicon glyphicon-home'></span>3C 欢迎注册</a>
     </div>
 
     <div class="login-main" id="loginMain" >
@@ -137,7 +137,6 @@
                         <div class="form-group" style="margin-top: 20px;margin-bottom: 20px;">
                             <span id="message" class="text-center" style="color: #ffa026;font-size: 15px;">
                                 <!--登录错误提示放这里-->
-                                撒旦撒
                                 <br/>
                             </span>
                         </div>
@@ -153,8 +152,6 @@
         </div>
     </div>
 
-
-
 </div>
 
 <script src="../../static/plugins/jQuery/jquery-1.12.1.min.js" type="text/javascript"></script>
@@ -162,6 +159,7 @@
 <script src="../../static/scripts/xingsu.user.topnav.js" type="text/javascript"></script>
 <script src="../../static/scripts/xingsu.user.bottomNav.js" type="text/javascript"></script>
 <script src="../../static/scripts/xingsu.ajax.auth.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.config.js" type="text/javascript"></script>
 <script src="../../static/scripts/xingsu.extensions.js" type="text/javascript"></script>
 <script src="../../static/scripts/xingsu.util.js" type="text/javascript"></script>
 <script src="../../static/plugins/layer/layer.js" type="text/javascript"></script>
@@ -174,9 +172,38 @@
             var password = $("#password").val();
             var passwordAgain = $("#passwordAgain").val();
 
-            var ajaxUrl = "../../";
-            $ajax.ajax(ajaxUrl, data, $config.HttpVerbs.POST, function () {
+            if( password != passwordAgain){
+                $("#message").text("密码输入不一致");
+                $("#password").val("");
+                $("#passwordAgain").val("");
+                return;
+            }
 
+            if(username == "" || passwordAgain == "" || password == ""){
+                $("#message").text("请输入信息");
+                return;
+            }
+
+            if(passwordAgain.length < 6 || password.length < 6){
+                $("#message").text("密码不能少于6位");
+                return;
+            }
+
+            var ajaxUrl = "../../user/register.do";
+            var data = {
+                "username": $("#username").val(),
+                "password": $("#password").val()
+            };
+            console.log(data)
+            $utils.loading.start();
+            $ajax.ajax(ajaxUrl, data, $config.HttpVerbs.POST, function (result) {
+                $utils.loading.close();
+                if(!result.success){
+                    $("#message").text(result.msg);
+                    console.log(result);
+                    return ;
+                }
+                location.href = "login.html";
             });
         });
 

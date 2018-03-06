@@ -54,7 +54,7 @@ public class UserServiceImpl implements IUserService {
         //sha256加盐密
         String salt = UUID.randomUUID().toString();
         user.setSalt(salt);
-        user.setPassword(Coder.sha256(user.getPassword()) + salt);
+        user.setPassword(Coder.sha256(data.password + salt));
 
 
         user.setAnswer(null);
@@ -116,7 +116,12 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ServerResponse<User> getInformation(Integer userId) {
-        return null;
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("找不到当前用户");
+        }
+        user.setPassword(StringUtils.EMPTY);
+        return ServerResponse.createBySuccess(user);
     }
 
     @Override

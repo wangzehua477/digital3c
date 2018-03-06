@@ -183,13 +183,15 @@
                 "        </div>";
             var columnItem = "<div class=\"col-sm-6 col-md-3\">\n" +
                 "                <div class=\"thumbnail\" style=\"margin-top: 13px\">\n" +
-                "                    <img style=\"width: 130px; height: 155px;margin-top: 12px\" src=\"{0}\"/>\n" +
-                "                    <div class=\"caption\" style=\"text-align: center\">\n" +
-                "                        <p>{1}</p>\n" +
-                "                        <p style=\"color:#ed2441; text-align: center\">\n" +
-                "                            ￥{2}\n" +
-                "                        </p>\n" +
-                "                    </div>\n" +
+                "                    <a href='productDetail.html?productId={3}'>" +
+                "                       <img style=\"width: 130px; height: 155px;margin-top: 12px\" src=\"{0}\"/>\n" +
+                "                       <div class=\"caption\" style=\"text-align: center\">\n" +
+                "                            <p>{1}</p>\n" +
+                "                           <p style=\"color:#ed2441; text-align: center\">\n" +
+                "                               ￥{2}\n" +
+                "                           </p>\n" +
+                "                       </div>\n" +
+                "                   </a>\n" +
                 "                </div>\n" +
                 "            </div>";
 
@@ -202,14 +204,13 @@
                 var columnItemTemp="";
                 $.each(result.data, function (index, value) {
                     var mainImage = "../../product/getImage?imageName=" + value.mainImage;
-                    columnItemTemp += String.format(columnItem, mainImage, value.subtitle, value.price);
+                    columnItemTemp += String.format(columnItem, mainImage, value.subtitle, value.price, value.id);
                 });
                 var columnTemp = String.format(column, index, columnItemTemp);
                 $("#column").append(columnTemp);
             }, {async: false});
 
         }
-
 
     });
 
