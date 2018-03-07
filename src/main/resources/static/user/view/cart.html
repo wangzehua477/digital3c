@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="../../static/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <title>3C数码-购物车</title>
+</head>
+<body>
+<style>
+    li{
+        display:block;
+        float:left;
+        width: 73px;
+        height: 24px;
+    }
+
+</style>
+<div style="background-color: #f0f0f0">
+    <div class="container">
+
+        <div id="topNav"></div>
+
+        <div id="searchForm" class="input-group" style="margin: 5px 100px 45px 100px;">
+            <span class="input-group-addon">3C数码</span>
+            <input type="text" class="form-control">
+            <span class="input-group-addon btn">搜索</span>
+        </div>
+        <hr style="border: red solid 1px"/>
+
+        <div style="margin-bottom: 25px">
+            <a href="index.html"><span style="color: grey" id="mouseChangeColor1">3CDigital</span></a>
+            <span style="color: grey">></span>
+            <a href="#"><span style="color: grey" id="mouseChangeColor2">我的购物车</span></a>
+        </div>
+
+
+        <div class="panel panel-default">
+            <!-- 查询条件区域（可选） -->
+            <div class="panel-heading " style="background-color: white">购物车</div>
+            <div class="panel-body" style="position: relative;padding:0 0 15px 0;">
+                <div class="table-responsive">
+                    <!-- 查询结果显示区域 -->
+                    <table class="table table-responsive table-striped table-hover text-center"
+                           style="border-bottom: 1px solid #ddd" id="products">
+                        <thead>
+                        <tr style="color:black;">
+                            <th class="text-center" data-field="allSelect" data-text="全选" style="width: 7%">
+                                <input type="checkbox" value="allSelect" />全选
+                            </th>
+                            <th class="text-center" data-field="productInfo" data-text="商品信息" style="width: 43%" >
+                                商品信息
+                            </th>
+                            <th class="text-center" data-field="unitPrice" data-text="单价" style="width: 10%">
+                                单价
+                            </th>
+                            <th class="text-center" data-field="Quantity" data-text="数量" style="width: 20%">
+                                数量
+                            </th>
+                            <th class="text-center" data-field="total" data-text="合计" style="width: 10%">
+                                合计
+                            </th>
+                            <th class="text-center" data-field="operating" data-text="操作" style="width: 10%">
+                                操作
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="checkbox"/></td>
+                                <td>3</td>
+                                <td>3</td>
+                                <td>3</td>
+                                <td>3</td>
+                                <td>3</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="bottomNav"></div>
+    </div>
+</div>
+<script src="../../static/plugins/jQuery/jquery-1.12.1.min.js" type="text/javascript"></script>
+<script src="../../static/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.user.topnav.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.user.bottomNav.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.ajax.auth.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.config.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.extensions.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.util.js" type="text/javascript"></script>
+<script src="../../static/plugins/layer/layer.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        var currentUser = sessionStorage.getItem("currentUser");
+        var currentUserObj = JSON.parse(currentUser);
+        //强制登陆
+        if(currentUserObj.status != 0){
+            layer.alert("请登录后进入个人中心");
+            window.setTimeout(function () {
+                location.href = "login.html";
+            }, 3000);
+        }
+
+        init();
+
+        //todo cart 信息后台获取
+//        var ajaxUrl = "../../product/listByCategoryId?categoryId="+categoryId;
+//        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
+//            if(!result.success){
+//                console.log(result);
+//                return;
+//            }
+//            var columnItemTemp="";
+//            $.each(result.data, function (index, value) {
+//                var mainImage = "../../product/getImage?imageName=" + value.mainImage;
+//                columnItemTemp += String.format(columnItem, mainImage, value.subtitle, value.price, value.id);
+//            });
+//            var columnTemp = String.format(column, index, columnItemTemp);
+//            $("#column").append(columnTemp);
+//        });
+
+        function init(){
+            //鼠标移到的时候字显红色，移走恢复
+            mouseChangeColor("mouseChangeColor1");
+            mouseChangeColor("mouseChangeColor2");
+        }
+
+        //鼠标移动到指定元素改变颜色，鼠标指针从元素上移开再次恢复颜色
+        function mouseChangeColor(id) {
+            $("#"+ id).mouseover(function () {
+                $("#"+ id).css("color", "red");
+            });
+            $("#" + id).mouseout(function(){
+                $("#"+ id).css("color","grey");
+            });
+        }
+    });
+
+</script>
+</body>
+</html>

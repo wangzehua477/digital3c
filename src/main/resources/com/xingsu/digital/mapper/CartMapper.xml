@@ -116,4 +116,11 @@
       now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectCartProductCount" parameterType="int" resultType="int">
+    select NULLIF(sum(quantity),0) as count
+    from cart
+    where user_id = #{userId}
+  </select>
+
 </mapper>
