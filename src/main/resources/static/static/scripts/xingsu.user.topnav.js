@@ -5,7 +5,7 @@ $(function () {
     // if (!curUser)
     //     return;
     
-        var str = "<nav class=\"navbar navbar-default\" role=\"navigation\">\n" +
+        var str = "<nav class=\"navbar navbar-default\" role=\"navigation\" style='min-width: 1000px'>\n" +
             "        <div class=\"container-fluid\" style='background-color: #e3e4e5'>\n" +
             "            <div class=\"navbar-header\">\n" +
             "                <a class=\"navbar-brand\" href='/user/view/index.html'><span class=\"glyphicon glyphicon-home\">3C数码</a>\n" +

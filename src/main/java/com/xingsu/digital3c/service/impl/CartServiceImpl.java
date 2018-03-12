@@ -2,6 +2,7 @@ package com.xingsu.digital3c.service.impl;
 
 import com.google.common.collect.Lists;
 import com.xingsu.digital3c.common.Const;
+import com.xingsu.digital3c.common.ResponseCode;
 import com.xingsu.digital3c.common.ServerResponse;
 import com.xingsu.digital3c.dao.CartMapper;
 import com.xingsu.digital3c.dao.ProductMapper;
@@ -45,7 +46,27 @@ public class CartServiceImpl implements ICartService {
 
     @Override
     public ServerResponse<CartVo> add(Integer userId, Integer productId, Integer count) {
-        return null;
+        if (productId == null || count == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+
+        Cart cart = cartMapper.selectCartByUserIdProductId(userId, productId);
+        if (cart == null) {
+            //这个产品不再购物车里，需要新增一个这个产品的记录
+            Cart cartItem = new Cart();
+            cartItem.setQuantity(count);
+            cartItem.setChecked(Const.Cart.CHECKEN);
+            cartItem.setUserId(userId);
+            cartItem.setProductId(productId);
+            cartMapper.insert(cartItem);
+        } else {
+            //产品已经在购物车里
+            count = cart.getQuantity() + count;
+            cart.setQuantity(count);
+            cartMapper.updateByPrimaryKeySelective(cart);
+        }
+
+        return this.list(userId);
     }
 
     @Override
