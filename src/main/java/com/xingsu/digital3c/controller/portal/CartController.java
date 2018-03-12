@@ -21,7 +21,7 @@ public class CartController {
     @Autowired
     private ICartService iCartService;
 
-    @RequestMapping("list.do")
+    @RequestMapping(value="list.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<CartVo> list(HttpSession session){
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
@@ -40,7 +40,7 @@ public class CartController {
      * @param productId
      * @return
      */
-    @RequestMapping("add.do")
+    @RequestMapping(value="add.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<CartVo> add(HttpSession session, Integer count, Integer productId){
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
@@ -58,7 +58,7 @@ public class CartController {
      * @param productId
      * @return
      */
-    @RequestMapping("update.do")
+    @RequestMapping(value="update.do",method = RequestMethod.PUT)
     @ResponseBody
     public ServerResponse<CartVo> update(HttpSession session, Integer count, Integer productId){
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
@@ -76,7 +76,7 @@ public class CartController {
      * @param productIds
      * @return
      */
-    @RequestMapping("delete_product.do")
+    @RequestMapping(value="delete_product.do",method = RequestMethod.DELETE)
     @ResponseBody
     public ServerResponse<CartVo> deleteProduct(HttpSession session, String productIds){
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
@@ -93,7 +93,7 @@ public class CartController {
      * @param session
      * @return
      */
-    @RequestMapping("select_all.do")
+    @RequestMapping(value="select_all.do" ,method = RequestMethod.PUT)
     @ResponseBody
     public ServerResponse<CartVo> selectAll(HttpSession session){
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
@@ -109,7 +109,7 @@ public class CartController {
      * @param session
      * @return
      */
-    @RequestMapping("un_select_all.do")
+    @RequestMapping(value="un_select_all.do",method = RequestMethod.PUT)
     @ResponseBody
     public ServerResponse<CartVo> unSelectAll(HttpSession session){
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
@@ -127,7 +127,7 @@ public class CartController {
      * @param productId
      * @return
      */
-    @RequestMapping("select.do")
+    @RequestMapping(value="select.do",method = RequestMethod.PUT)
     @ResponseBody
     public ServerResponse<CartVo> Select(HttpSession session, Integer productId){
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
@@ -144,7 +144,7 @@ public class CartController {
      * @param productId
      * @return
      */
-    @RequestMapping("un_select.do")
+    @RequestMapping(value="un_select.do",method = RequestMethod.PUT)
     @ResponseBody
     public ServerResponse<CartVo> unSelect(HttpSession session, Integer productId){
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
