@@ -72,22 +72,19 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr class="cartTr">
-                                <td style='position:relative'><input id="checkbox" type="checkbox"  checked style="position: absolute; top: 50%; margin-top: -6.5px"/></td>
-                                <td><img src="../../static/images/iphonex_test.jpg" style="width: 82px; height: 82px;"/></td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>3</td>
-                            </tr>
                         </tbody>
                     </table>
-                    <div class="pull-right" style="margin-right: 10px">
-                        总价：<span id="totalPrice" style="margin-right: 10px; color: red; font-size: large"></span>
-                        <input id="toSettlement" type="button" class="btn btn-primary"  value="去结算"/>
+                    <div style="overflow: hidden">
+                        <div>
+                            <span id="deleteChecked" class="pull-left hidden" style="margin: 7px 10px 7px 20px; color: #999; cursor: pointer;">
+                                <span class="glyphicon glyphicon-trash"></span>删除选中
+                            </span>
+                        </div>
+                        <div id="toSettlementDiv" class="pull-right hidden" style="margin-right: 10px">
+                            总价：<span id="totalPrice" style="margin-right: 10px; color: red; font-size: large"></span>
+                            <input id="toSettlement" type="button" class="btn btn-primary"  value="去结算"/>
+                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -106,13 +103,11 @@
 <script src="../../static/plugins/layer/layer.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(function () {
-        var currentUser = sessionStorage.getItem("currentUser");
-        var currentUserObj = JSON.parse(currentUser);
         var $cartTableBody = $("#cartTable tbody");
         var cartTrStr = "<tr class='cartTr'>" +
                 "<td style='position:relative'><input id='checked{5}' type='checkbox' style='position: absolute; top: 50%; margin-top: -6.5px'/></td>" +
-                "<td><img src='{0}' style='width: 82px; height:82px'/></td>" +
-                "<td>{1}</td> " +
+                "<td><a href='productDetail.html?productId={5}'><img src='{0}' style='width: 82px; height:82px'/></a></td>" +
+                "<td><a href='productDetail.html?productId={5}'>{1}</a></td> " +
                 "<td>{2}</td> " +
                 "<td>{3}</td> " +
                 "<td>{4}</td> " +
@@ -120,14 +115,7 @@
             "</tr>";
 
         var isAllChecked = true;            //是否全选
-        //强制登陆
-        if(currentUserObj.status !=  0){
-            layer.alert("请登录后进入个人中心");
-            window.setTimeout(function () {
-                location.href = "login.html";
-            }, 3000);
-            return;
-        }
+        var cartProductIds;            //购物车中所有商品的id
 
         init();
 
@@ -167,9 +155,19 @@
         }
         //填充表
         function fillTable(data){
-            isAllChecked = data.allChecked;
-
             $cartTableBody.empty();
+
+            if(data.cartProductVoList.length <= 0){
+                $("#deleteChecked").addClass("hidden");
+                $cartTableBody.append("<td style='padding: 10px' colspan='7'>您的购物车空空如也， <a href='index.html'>点击立即去购物</a></td>>");
+                return;
+            }
+            $("#toSettlementDiv").removeClass("hidden");
+
+            $("#deleteChecked").removeClass("hidden");
+            isAllChecked = data.allChecked;
+            cartProductIds = "";
+
             var cartTrStrTemp = "";
             var image = "";
             $.each(data.cartProductVoList, function (index, value) {
@@ -179,6 +177,12 @@
                 //如果选中
                 if(value.productChecked){
                     $("#checked" + value.productId).attr("checked", "checked");
+
+                    if(cartProductIds == "")
+                        cartProductIds = value.productId;
+                    else
+                        cartProductIds += "," + value.productId;
+
                 }else{
                     $("#checked" + value.productId).removeAttr("checked");
                 }
@@ -186,6 +190,11 @@
                 //单选的时候
                 $("#checked" + value.productId).click(function () {
                     selectedChecked(value.productId, value.productChecked);
+                });
+
+                //删除商品
+                $("#delete" + value.productId).click(function () {
+                   deleteByProductId(value.productId);
                 });
             });
             //总价显示
@@ -197,6 +206,11 @@
             }else{
                 $("#allChecked").removeAttr("checked");
             }
+
+            //删除选中
+            $("#deleteChecked").click(function () {
+                deleteByProductId(cartProductIds);
+            });
 
         }
 
@@ -236,6 +250,29 @@
                 fillTable(result.data);
             });
         }
+
+        //删除商品
+        function  deleteByProductId(productIds) {
+            layer.confirm('确认删除该商品吗？', {
+                btn : [ '确定', '取消' ]//按钮
+            }, function(index) {
+                layer.close(index);
+                if(productIds == ""){
+                    layer.alert("您未选中任何商品");
+                    return;
+                }
+                var ajaxUrl = "../../cart/delete_product.do?productIds=" + productIds;
+                $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.DELETE, function (result) {
+                    if (!result.success) {
+                        console.log(result);
+                        return;
+                    }
+                    fillTable(result.data);
+                });
+            });
+
+        }
+
     });
 
 </script>

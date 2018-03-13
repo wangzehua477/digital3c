@@ -1,5 +1,6 @@
 package com.xingsu.digital3c.service.impl;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.xingsu.digital3c.common.Const;
 import com.xingsu.digital3c.common.ResponseCode;
@@ -76,7 +77,12 @@ public class CartServiceImpl implements ICartService {
 
     @Override
     public ServerResponse<CartVo> deleteProduct(Integer userId, String productIds) {
-        return null;
+        List<String> productIdList = Splitter.on(",").splitToList(productIds);
+        if(CollectionUtils.isEmpty(productIdList)){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        cartMapper.deleteByUserIdProductIds(userId, productIdList);
+        return this.list(userId);
     }
 
 
@@ -110,7 +116,7 @@ public class CartServiceImpl implements ICartService {
                     cartProductVo.setProductPrice(product.getPrice());
                     cartProductVo.setProductStock(product.getStock());
                     //判断库存
-                    int buyLimitCount = 0;
+                    int buyLimitCount;
                     if (product.getStock() >= cartItem.getQuantity()) {
                         buyLimitCount = cartItem.getQuantity();
                         cartProductVo.setLimitQuantity(Const.Cart.LIMIT_NUM_SUCCESS);

@@ -31,7 +31,7 @@
       update_time)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
       #{quantity,jdbcType=INTEGER}, #{checked,jdbcType=INTEGER}, now(),
-      now()
+      now())
   </insert>
   <insert id="insertSelective" parameterType="com.xingsu.digital3c.pojo.Cart">
     insert into cart
@@ -118,7 +118,7 @@
   </update>
 
   <select id="selectCartProductCount" parameterType="int" resultType="int">
-    select NULLIF(sum(quantity),0) as count
+    select ifnull(sum(quantity),0) as count
     from cart
     where user_id = #{userId}
   </select>
@@ -153,4 +153,15 @@
     where user_id = #{userId}
     and product_id = #{productId}
   </select>
+
+  <delete id="deleteByUserIdProductIds" parameterType="map">
+    delete from cart
+    where user_id = #{userId}
+    <if test="productIdList != null">
+      and product_id in
+      <foreach collection="productIdList" item="item" index="index" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+    </if>
+  </delete>
 </mapper>

@@ -44,10 +44,10 @@
                 <h4 style="margin-left: 15px">Apple iPhone 7 Plus (A1661) 128G 玫瑰金色 移动联通电信4G手机</h4>
                 <h5 style="margin-left: 15px; color: red; margin-bottom: 25px">iPhone 7，现更以红色呈现。</h5>
                 <div style="overflow: hidden; width: 98%; height: 47px; line-height: 0px; margin:0 auto; background-color: #e3e4e5;">
-                    <p style="margin: 25px; color: grey">价格</p>
+                    <p style="margin: 25px; color: grey">价格: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span id="price" style="color: #c60023; font-size: large"></span></p>
                 </div>
                 <div style="overflow: hidden; margin-left: 7px; margin-top: 15px">
-                    <p style="margin: 25px; color: grey; float: left">库存: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;15151</p>
+                    <p style="margin: 25px; color: grey; float: left">库存: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="stock"></span></p>
                 </div>
                 <div style="overflow: hidden; margin-left: 7px">
                     <p style="margin: 25px; color: grey; float: left">数量:</p>
@@ -62,7 +62,7 @@
         <div style="overflow: hidden; background-color: #e3e4e5; border-bottom: 1px solid #c60023">
             <span style="font-size: 25px; color: white;background-color: #c60023; padding: 10px; ">商品详情</span>
         </div>
-        <div id="productDetail" style="margin-bottom: 80px">
+        <div id="productDetail" style="margin-bottom: 80px;text-align: center;">
             <!--<img src="../../static/images/huawei_test.jpg" style="width: 790px; height: auto;display:block; margin: 0 auto; padding: 25px 10px"/>-->
             <!--<img src="../../static/images/xiaomiNote3.jpg" style="width: 790px; height: auto;display:block; margin: 0 auto"/>-->
             <!--<img src="../../static/images/iphonex_test.jpg" style="width: 790px; height: auto;display:block; margin: 0 auto"/>-->
@@ -107,16 +107,30 @@
 
             //子图显示
             var subImageStr = "<li id='subImage{0}' style='margin-right: 10px'><img src='{1}' style='width: 74px;height: 74px;'/></li>";
-            var subImageArr = result.data.subImages.split(",");
+
+            //主图显示在子图第一个位置
             var subImageStrTemp = String.format(subImageStr, -1, mainImage);
             $("#subImages").append(subImageStrTemp);
-            mouseChangeImage("subImage-1", mainImage);
-            $.each(subImageArr, function (index, value) {
-                var subImage = "../../product/getImage?imageName=" + value;
-                subImageStrTemp = String.format(subImageStr, index, subImage);
-                $("#subImages").append(subImageStrTemp);
-                mouseChangeImage("subImage" + index, subImage);
-            });
+
+            //如果该商品有子图的话
+            if(result.data.subImages != null){
+                var subImageArr = result.data.subImages.split(",");
+                mouseChangeImage("subImage-1", mainImage);
+                $.each(subImageArr, function (index, value) {
+                    var subImage = "../../product/getImage?imageName=" + value;
+                    subImageStrTemp = String.format(subImageStr, index, subImage);
+                    $("#subImages").append(subImageStrTemp);
+                    mouseChangeImage("subImage" + index, subImage);
+                });
+            }
+
+            //价格显示
+            $("#price").text("￥" + result.data.price);
+
+            //库存显示
+            $("#stock").text(result.data.stock);
+
+            //库存显示
 
             //商品详情展示
             $("#productDetail").append(result.data.detail);
@@ -186,7 +200,12 @@
                 if(!result.success){
                     console.log(result);
                     if(result.status == 10){
-                        layer.alert("请登录！")
+                        layer.alert("请登录！", {
+                            icon: 7,
+                            end: function () {
+                                location.href = "result.html";
+                            }}
+                        );
                         setTimeout(function () {
                             location.href = "login.html";
                         }, 2000)
@@ -195,7 +214,20 @@
                         layer.alert(result.msg+"出错了，请刷新重试");
                     return;
                 }
-                location.href = "result.html";
+                console.log(result)
+                if(result.data.cartProductVoList[0].limitQuantity == "LIMIT_NUM_FAIL"){
+                    layer.alert("添加的物品超过目前的库存，已帮您自动选择最大库存值！", {
+                            icon: 7,
+                            end: function () {
+                                location.href = "result.html";
+                            }}
+                    );
+                    setTimeout(function () {
+                        location.href = "result.html";
+                    }, 2000);
+                }else{
+                    location.href = "result.html";
+                }
 
             });
         });
