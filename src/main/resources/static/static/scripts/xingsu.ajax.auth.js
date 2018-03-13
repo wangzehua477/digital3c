@@ -32,6 +32,13 @@ var isAjaxError = false;
                 contentType = "application/json";
             }
 
+            var forcedLogin = false;
+            if(args){
+                if(typeof (args.forcedLogin) === "boolean"){
+                    forcedLogin = args.forcedLogin;
+                }
+            }
+
             var dataStr = "";
 
             if (type != "GET" && type != "DELETE") {
@@ -46,6 +53,21 @@ var isAjaxError = false;
                 contentType: contentType,
                 dataType: dataType,
                 success: function (data) {
+                    if(forcedLogin){
+                        if(data.status == 10){
+                            layer.alert("登录后才能执行该操作!", {
+                                icon: 2,
+                                end: function () {
+                                    location.href = "login.html";
+                                }}
+                            );
+                            window.setTimeout(function () {
+                                location.href = "login.html";
+                            }, 3000);
+                            return;
+                        }
+                    }
+
                     callback(data);
                 },
                 error: function (xhr, status, error) {

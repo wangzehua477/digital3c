@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <link href="../../static/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../../static/plugins/layui/css/layui.css" rel="stylesheet" type="text/css"/>
     <title>3C数码-购物车</title>
 </head>
 <body>
@@ -109,7 +110,11 @@
                 "<td><a href='productDetail.html?productId={5}'><img src='{0}' style='width: 82px; height:82px'/></a></td>" +
                 "<td><a href='productDetail.html?productId={5}'>{1}</a></td> " +
                 "<td>{2}</td> " +
-                "<td>{3}</td> " +
+                "<td>" +
+                    "<button id='subtract{5}' class='layui-btn layui-btn-primary layui-btn-sm'><i class='layui-icon'>-</i></button>" +
+                        "<span id='count{5}' style='text-align: center; margin-left: 5px; margin-right: 5px'>{3}</span>" +
+                    "<button id='add{5}' class='layui-btn layui-btn-primary layui-btn-sm'><i class='layui-icon'>+</i></button>" +
+                "</td> " +
                 "<td>{4}</td> " +
                 "<td id='delete{5}' style='color: #999; cursor: pointer'>删除</td> " +
             "</tr>";
@@ -196,6 +201,23 @@
                 $("#delete" + value.productId).click(function () {
                    deleteByProductId(value.productId);
                 });
+
+                //商品数量加一
+                $("#add" + value.productId).click(function () {
+                    var count = parseInt($("#count" + value.productId).text()) + 1;
+                    addOrSubSelectAjax(count, value.productId);
+                });
+
+                //商品数量减一
+                $("#subtract" + value.productId).click(function () {
+                    var count = parseInt($("#count" + value.productId).text()) - 1;
+                    if(count > 0){
+                        $("#count" + value.productId).text(count);
+                        addOrSubSelectAjax(count, value.productId);
+                    }
+
+                });
+
             });
             //总价显示
             $("#totalPrice").text("￥" + data.cartTotalPrice);
@@ -268,9 +290,29 @@
                         return;
                     }
                     fillTable(result.data);
-                });
+                }, {forcedLogin: true});
             });
+        }
 
+        //商品数量加一或者减一并且更新相关数据
+        function addOrSubSelectAjax(count, productId) {
+            var ajaxUrl = "../../cart/update.do?count=" + count + "&productId=" + productId;
+            $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.PUT, function (result) {
+                if(!result.success){
+                    console.log(result);
+                    return;
+                }
+                $.each(result.data.cartProductVoList, function (index, value) {
+                    if(count > parseInt($("#count" + productId).text()) && value.productId == productId){
+                        if(count > value.productStock){
+                            layer.alert("已达到库存上限，无法继续增加该商品！", {icon: 5});
+                            return;
+                        }
+                    }
+                });
+                $("#count" + productId).text(count);
+                fillTable(result.data);
+            }, {forcedLogin: true});
         }
 
     });
