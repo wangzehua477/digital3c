@@ -81,9 +81,9 @@
                                 <span class="glyphicon glyphicon-trash"></span>删除选中
                             </span>
                         </div>
-                        <div id="toSettlementDiv" class="pull-right hidden" style="margin-right: 10px">
+                        <div id="confirmDiv" class="pull-right hidden" style="margin-right: 10px">
                             总价：<span id="totalPrice" style="margin-right: 10px; color: red; font-size: large"></span>
-                            <input id="toSettlement" type="button" class="btn btn-primary"  value="去结算"/>
+                            <input id="confirm" type="button" class="btn btn-primary"  value="去结算"/>
                         </div>
                     </div>
                 </div>
@@ -137,9 +137,9 @@
             $("#allChecked").click(function () {
                 selectedAllChecked();
             });
-            //点击去结算
-            $("#toSettlement").click(function(){
-               location.href = "toSettlement.html";
+            //点击去确认订单
+            $("#confirm").click(function(){
+               location.href = "confirm.html";
             });
         });
 
@@ -167,7 +167,7 @@
                 $cartTableBody.append("<td style='padding: 10px' colspan='7'>您的购物车空空如也， <a href='index.html'>点击立即去购物</a></td>>");
                 return;
             }
-            $("#toSettlementDiv").removeClass("hidden");
+            $("#confirmDiv").removeClass("hidden");
 
             $("#deleteChecked").removeClass("hidden");
             isAllChecked = data.allChecked;

@@ -138,7 +138,7 @@ public class UserController {
      * @param passwordNew
      * @return
      */
-    @RequestMapping(value = "reset_password.do", method = RequestMethod.POST)
+    @RequestMapping(value = "reset_password.do", method = RequestMethod.PUT)
     @ResponseBody
     public ServerResponse<String> resetPassword(HttpSession session, String passwordOld, String passwordNew){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -153,9 +153,9 @@ public class UserController {
      * 更新用户信息
      * @return
      */
-    @RequestMapping(value = "update_information.do", method = RequestMethod.POST)
+    @RequestMapping(value = "update_information.do", method = RequestMethod.PUT)
     @ResponseBody
-    public ServerResponse<User> update_information(HttpSession session, User user){
+    public ServerResponse<User> update_information(HttpSession session, @RequestBody  User user){
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if(currentUser == null){
             // 登录状态-才能更新用户信息

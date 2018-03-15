@@ -151,7 +151,7 @@
             }
             $ajax.ajax(ajaxUrl, data, $config.HttpVerbs.POST, function (result) {
                 if(!result.success){
-                    layer.alert(result.msg)
+                    layer.alert(result.msg, {icon: 2});
                     return;
                 }
                 location.href = "index.html";

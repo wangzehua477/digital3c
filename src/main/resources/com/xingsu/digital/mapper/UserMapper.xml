@@ -148,7 +148,7 @@
       answer = #{answer,jdbcType=VARCHAR},
       role = #{role,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      now()
+      update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -169,6 +169,20 @@
     <include refid="Base_Column_List"/>
     from user
     where username = #{username}
+    and password = #{password}
+  </select>
+
+  <select id="checkEmailByUserId" resultType="int" parameterType="map">
+    select count(1)
+    from user
+    where email = #{email}
+    and id != #{userId}
+  </select>
+
+  <select id="checkPassword" resultType="int" parameterType="map">
+    select count(1)
+    from user
+    where id = #{userId}
     and password = #{password}
   </select>
 
