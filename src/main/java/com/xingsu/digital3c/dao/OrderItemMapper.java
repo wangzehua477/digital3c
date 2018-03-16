@@ -2,6 +2,9 @@ package com.xingsu.digital3c.dao;
 
 import com.xingsu.digital3c.pojo.OrderItem;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface OrderItemMapper {
@@ -16,4 +19,6 @@ public interface OrderItemMapper {
     int updateByPrimaryKeySelective(OrderItem record);
 
     int updateByPrimaryKey(OrderItem record);
+
+    void batchInsert(@Param("orderItemList") List<OrderItem> orderItemList);
 }
