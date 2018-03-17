@@ -40,7 +40,6 @@ var isAjaxError = false;
             }
 
             var dataStr = "";
-
             if (type != "GET" && type != "DELETE") {
                 dataStr = JSON.stringify(data);
             }
@@ -55,7 +54,7 @@ var isAjaxError = false;
                 success: function (data) {
                     if(forcedLogin){
                         if(data.status == 10){
-                            layer.alert("登录后才能执行该操作!", {
+                            layer.alert(data.msg, {
                                 icon: 2,
                                 end: function () {
                                     location.href = "login.html";

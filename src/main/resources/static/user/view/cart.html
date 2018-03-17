@@ -140,7 +140,7 @@
             $("#confirm").click(function(){
                location.href = "confirm.html";
             });
-        });
+        }, {forcedLogin: true});
 
         function init(){
             //鼠标移到的时候字显红色，移走恢复
@@ -269,7 +269,7 @@
                     return;
                 }
                 fillTable(result.data);
-            });
+            }, {forcedLogin: true});
         }
 
         //删除商品

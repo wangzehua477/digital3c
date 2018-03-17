@@ -16,8 +16,8 @@
     }
 
     .address{
-        border: 1px dashed #ccc;
-        width: 200px; height: 100px;
+        border: 3px dashed #ccc;
+        width: 200px; height: 120px;
         overflow: hidden;
         cursor: pointer;
         float: left;
@@ -59,20 +59,8 @@
 
             <div class="panel-body addressList">
 
-                <div class="address">
-                    <div style="color: #999; margin: 8px">
-                        <span>绍兴</span>
-                        <span>柯桥区</span>
-                        <span>王泽华收</span>
-                        <hr style="color:#999"/>
-                        <span>详细地址</span>
-                        <span>收件人的手机号</span>
-                        <span>邮编</span>
-                    </div>
-                </div>
-
                 <div class="address" id="addAddress" style="text-align: center;">
-                    <img src="../../static/images/addShipping.jpg" style="width: 60px; margin-top: 10px"/>
+                    <img src="../../static/images/addShipping.jpg" style="width: 60px; margin-top: 20px"/>
                     <div style="color: #999">点击添加新的收货地址</div>
                 </div>
             </div>
@@ -145,7 +133,7 @@
 <script type="text/javascript">
     $(function () {
         var $orderTableBody = $("#orderTable tbody");
-
+        var shippingId = -1;
         init();
 
         //添加新的收获地址
@@ -158,7 +146,12 @@
                 skin: "layui-layer-lan",
                 title: "使用新地址",
                 scrollbar: false,
-                content: "shipping.html"
+                content: "addShipping.html",
+                end: function () {
+                    $("#addAddress").css("border", "3px dashed #ccc");
+                    shippingId = -1;
+                    getShippingList();
+                }
             });
         });
 
@@ -185,8 +178,120 @@
             $("#totalPrice").text("￥" + result.data.productTotalPrice);
         });
 
+        //收获地址的获取
+        var addressItemStr = "<div class='address address2'><div id='shippingId{0}' class='shippingId' style='color: #999; margin: 8px;position: relative'> " +
+            "<span>{1}</span> " +
+            "<span>{2}</span> " +
+            "<span>{3}收</span> " +
+            "<hr style='color:#999'/> " +
+            "<span>{4}</span> " +
+            "<span>{5}</span> " +
+            "<span>{6}</span> " +
+            "<span class='edit hidden' id='edit{0}' style='position: absolute; top: 80px; left: 110px;'>编辑</span>" +
+            "<span class='delete hidden' id='delete{0}' style='position: absolute; top: 80px; left: 145px'>删除</span>" +
+            "</div></div>";
+
+        getShippingList();
+        function getShippingList(){
+            var ajaxUrl = "../../shipping/list.do";
+            $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
+                if(!result.success){
+                    console.log(result);
+                    return;
+                }
+                fillTable(result.data);
+
+                //绑定点击事件
+                $(".address").click(function () {
+                    $(this).css("border", "3px dashed red");
+                    $(this).siblings(".address").css("border", "3px dashed #ccc");
+                    shippingId = $(this).find(".shippingId").attr("id").substring(10);
+                });
+
+                //点击编辑事件
+                $(".address").on("click",".edit",function () {
+                    var shippingId = $(this).attr("id").substring(4);
+                    layer.open({
+                        type: 2,
+                        area: ['500px', '530px'],
+                        shade: [0.8, '#393D49'],
+                        shadeClose: true,
+                        skin: "layui-layer-lan",
+                        title: "使用新地址",
+                        scrollbar: false,
+                        content: "updateShipping.html?shippingId=" + shippingId,
+                        end: function () {
+                            getShippingList();
+                        }
+                    });
+                });
+
+                //点击删除事件
+                $(".address").on("click",".delete",function () {
+                    var shippingId = $(this).attr("id").substring(6);
+
+                    layer.confirm('确认删除该地址吗？', {
+                        btn : [ '确定', '取消' ]//按钮
+                    }, function(index) {
+                            layer.close(index);
+                            if(!$utils.checkNumber(shippingId)){
+                                layer.alert("发生异常，请刷新重试！");
+                                return;
+                            }
+
+                            //删除收获该地址
+                            $utils.loading.start();
+                            var ajaxDeleteUrl = "../../shipping/del.do?shippingId=" + shippingId;
+                            $ajax.ajax(ajaxDeleteUrl, null, $config.HttpVerbs.DELETE, function (result) {
+                                $utils.loading.close();
+                                if (!result.success) {
+                                    console.log(result);
+                                    return;
+                                }
+                                layer.alert(result.data, {end:function () {
+                                    location.reload();
+                                }});
+                                setTimeout(function () {
+                                    location.reload();
+                                },3000);
+                            });
+                        });
+
+                });
+
+                //移进绑定编辑事件
+                $(".address").mouseover(function () {
+                    $(this).find(".edit").removeClass("hidden");
+                });
+
+                //移出绑定编辑事件
+                $(".address").mouseout(function () {
+                    $(this).find(".edit").addClass("hidden");
+                });
+
+                //移进绑定删除事件
+                $(".address").mouseover(function () {
+                    $(this).find(".delete").removeClass("hidden");
+                });
+                //移出绑定删除事件
+                $(".address").mouseout(function () {
+                    $(this).find(".delete").addClass("hidden");
+                });
+
+            }, {forcedLogin: true});
+        }
 
 
+
+        function  fillTable(data) {
+            $(".addressList").find(".address2").remove();
+            var addressItemStrTemp = "";
+            $.each(data.list, function (index, value) {
+                addressItemStrTemp += String.format(addressItemStr, value.id, value.receiverProvince, value.receiverCity,
+                    value.receiverName, value.receiverAddress, value.receiverPhone, $utils.toStr(value.receiverZip));
+            });
+            $(".addressList").prepend(addressItemStrTemp);
+        }
 
 
 
@@ -210,6 +315,15 @@
             });
         }
 
+        //提交订单
+        $("#submitOrder").click(function () {
+            if(shippingId >=0){
+                location.href = "payment.html?shippingId=" + shippingId;
+            }
+            else{
+                layer.alert("请选择地址后提交订单！");
+            }
+        });
     });
 
 </script>

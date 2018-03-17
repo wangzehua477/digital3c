@@ -32,21 +32,21 @@ $(function () {
 
     var ajaxUrl = "../../user/get_information.do";
     $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
-        if(result.status == 10){
-            if(forcedLogin){
-                layer.alert("登录后才能执行该操作!", {
-                    icon: 2,
-                    end: function () {
-                        location.href = "login.html";
-                    }}
-                );
-                window.setTimeout(function () {
-                    location.href = "login.html";
-                }, 3000);
-                return;
-            }
-        }
-        else {
+        // if(result.status == 10){
+        //     if(forcedLogin){
+        //         layer.alert("登录后才能执行该操作!", {
+        //             icon: 2,
+        //             end: function () {
+        //                 location.href = "login.html";
+        //             }}
+        //         );
+        //         window.setTimeout(function () {
+        //             location.href = "login.html";
+        //         }, 3000);
+        //         return;
+        //     }
+        // }
+        if(result.success) {
             $("#login").text("你好，" + result.data.username);
             $("#register").text("退出");
             $("#login").attr("href", "personalCenter.html");

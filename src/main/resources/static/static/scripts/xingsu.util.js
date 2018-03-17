@@ -644,39 +644,6 @@
                     layer.close($utils.loading.layerIndex);
                 } catch (ex) {
                 }
-            },
-
-            /**
-             * 开始显示支付宝loading
-             * @param message
-             */
-            show: function (message) {
-                message = message || "正在加载";
-                setTimeout(function () {
-                    if (window.ap && ap.isAlipay) {
-                        ap.showLoading({
-                            content: message
-                        });
-                    } else {
-                        console.warn(String.format("$utils.show(\"{0}\")", message));
-                    }
-                }, 10);
-            },
-
-            /**
-             * 隐藏支付宝loading
-             */
-            hide: function (delay) {
-                if (!delay)
-                    delay = 100;
-
-                setTimeout(function () {
-                    if (window.ap && ap.isAlipay) {
-                        ap.hideLoading();
-                    } else {
-                        console.warn(String.format("$utils.hide(\"{0}\")", delay));
-                    }
-                }, delay);
             }
         },
 

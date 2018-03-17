@@ -161,7 +161,7 @@
                     return;
                 }
                 layer.alert(result.msg, {icon: 1});
-            });
+            }, {forcedLogin: true});
         });
 
         //修改密码
@@ -187,7 +187,7 @@
                    }else{
                        layer.alert(result.msg, {icon:1});
                    }
-                });
+                }, {forcedLogin: true});
             }
         });
 

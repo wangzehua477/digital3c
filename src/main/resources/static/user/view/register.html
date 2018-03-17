@@ -192,7 +192,6 @@
                 "username": $("#username").val(),
                 "password": $("#password").val()
             };
-            console.log(data)
             $utils.loading.start();
             $ajax.ajax(ajaxUrl, data, $config.HttpVerbs.POST, function (result) {
                 $utils.loading.close();
@@ -201,7 +200,7 @@
                     console.log(result);
                     return ;
                 }
-                location.href = "login.html";
+//                location.href = "login.html";
             });
         });
 
