@@ -20,6 +20,9 @@
         <mapper resource="com/xingsu/digital/mapper/UserMapper.xml"/>
         <mapper resource="com/xingsu/digital/mapper/CartMapper.xml"/>
         <mapper resource="com/xingsu/digital/mapper/ShippingMapper.xml"/>
+        <mapper resource="com/xingsu/digital/mapper/OrderMapper.xml"/>
+        <mapper resource="com/xingsu/digital/mapper/OrderItemMapper.xml"/>
+        <mapper resource="com/xingsu/digital/mapper/PayInfoMapper.xml"/>
 
     </mappers>
 </configuration>

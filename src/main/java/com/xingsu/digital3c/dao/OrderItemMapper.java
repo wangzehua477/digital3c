@@ -21,4 +21,6 @@ public interface OrderItemMapper {
     int updateByPrimaryKey(OrderItem record);
 
     void batchInsert(@Param("orderItemList") List<OrderItem> orderItemList);
+
+    List<OrderItem> getByOrderNoUserId(@Param("orderNo") Long orderNo, @Param("userId") Integer userId);
 }

@@ -10,4 +10,6 @@ public interface IOrderService {
     ServerResponse getOrderCartProduct(Integer userId);
 
     ServerResponse createOrder(Integer userId, Integer shippingId);
+
+    ServerResponse getOrderList(Integer id, int pageNum, int pageSize);
 }

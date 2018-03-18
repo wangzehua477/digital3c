@@ -82,6 +82,7 @@
 <script src="../../static/plugins/layer/layer.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(function () {
+        var productStock = 0;
         var urlObject = $utils.parseUrl(location.href);
         var productId = urlObject.params["productId"] || "null";
         if(productId == "null"){
@@ -129,7 +130,7 @@
 
             //库存显示
             $("#stock").text(result.data.stock);
-
+            productStock = result.data.stock;
             //商品详情展示
             $("#productDetail").append(result.data.detail);
 
@@ -191,6 +192,11 @@
 
         //点击加入购物车
         $("#addCart").click(function(){
+            if(productStock <= 0){
+                layer.alert("当前商品已售空！");
+                return;
+            }
+
             var count = $("#count").val();
             var ajaxUrl = "../../cart/add.do?count=" + count +"&productId="+productId;
 

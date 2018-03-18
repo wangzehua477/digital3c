@@ -34,7 +34,7 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.xingsu.digital3c.pojo.Order">
-    insert into order (id, order_no, user_id, 
+    insert into `order` (id, order_no, user_id,
       shipping_id, payment, payment_type, 
       postage, status, payment_time, 
       send_time, end_time, close_time, 
@@ -198,4 +198,11 @@
      update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="int">
+    select <include refid="Base_Column_List" />
+    from `order`
+    where user_id = #{userId}
+    order by create_time desc
+  </select>
 </mapper>

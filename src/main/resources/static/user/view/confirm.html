@@ -317,8 +317,17 @@
 
         //提交订单
         $("#submitOrder").click(function () {
-            if(shippingId >=0){
-                location.href = "payment.html?shippingId=" + shippingId;
+            if($utils.checkNumber(shippingId) && shippingId >=0){
+
+                var ajaxUrl = "../../order/create.do?shippingId=" + shippingId;
+                $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.POST, function (result) {
+                    if(!result.success){
+                        layer.alert(result.msg, {icon:2});
+                        console.log(result);
+                    }else{
+                        console.log(result)
+                    }
+                }, {forcedLogin: true});
             }
             else{
                 layer.alert("请选择地址后提交订单！");
