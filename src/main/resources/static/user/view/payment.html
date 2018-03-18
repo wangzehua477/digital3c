@@ -50,6 +50,16 @@
             <a href="#"><span style="color: grey" id="mouseChangeColor2">订单支付</span></a>
         </div>
 
+        <h3 style="text-align: center; margin-bottom: 30px; color:#666">
+            订单提交成功,请您尽快支付!&nbsp;&nbsp;订单号:<span id="orderNo"></span>
+        </h3>
+        <h3 style="text-align: center; margin-bottom: 30px; color:#c60023">
+            请使用支付宝扫描二维码
+        </h3>
+
+        <div style=" text-align: center; margin-bottom: 30px">
+            <img id="qrCode" src="../../static/images/loading.gif.jpg" style="width: 250px;"/>
+        </div>
         <div id="bottomNav"></div>
 
     </div>
@@ -65,9 +75,29 @@
 <script src="../../static/plugins/layer/layer.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(function () {
+        var a = "localhost:8010//192.168.100.123/qr-1521282982941.png";
+        var lastIndex = a.lastIndexOf("/");
+        a = a.substring(lastIndex + 1);
+        alert(a)
         var urlObject = $utils.parseUrl(location.href);
-        var shippingId = urlObject.params["shippingId"] || "null";
-        alert(shippingId)
+        var orderNo = urlObject.params["orderNo"] || "null";
+        alert(orderNo)
+        if(orderNo == null){
+            layer.alert("出错啦!", {icon: 2});
+            return;
+        }
+        var ajaxUrl = "../../order/pay.do?orderNo=" + orderNo;
+        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.POST, function (result) {
+            if(!result.success){
+                layer.alert(result.msg, {icon:2});
+                console.log(result);
+            }else{
+                $("#orderNo").text(result.data.orderNo);
+                var imageName = result.data.qrUrl.substring(result.data.qrUrl.lastIndexOf("/") + 1);
+                var imageSrc = "../../product/getImage?imageName=" + imageName;
+                $("#qrCode").attr("src", imageSrc);
+            }
+        }, {forcedLogin: true});
     });
 
 </script>

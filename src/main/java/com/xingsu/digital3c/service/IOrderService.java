@@ -14,4 +14,6 @@ public interface IOrderService {
     ServerResponse getOrderList(Integer id, int pageNum, int pageSize);
 
     ServerResponse getOrderDetail(Integer id, Long orderNo);
+
+    ServerResponse pay(Long orderNo, Integer id, String path);
 }

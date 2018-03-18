@@ -1,5 +1,11 @@
 package com.xingsu.digital3c.controller.portal;
 
+import com.alipay.api.response.AlipayTradePrecreateResponse;
+import com.alipay.demo.trade.model.ExtendParams;
+import com.alipay.demo.trade.model.GoodsDetail;
+import com.alipay.demo.trade.model.builder.AlipayTradePrecreateRequestBuilder;
+import com.alipay.demo.trade.model.result.AlipayF2FPrecreateResult;
+import com.alipay.demo.trade.utils.ZxingUtils;
 import com.xingsu.digital3c.common.Const;
 import com.xingsu.digital3c.common.ResponseCode;
 import com.xingsu.digital3c.common.ServerResponse;
@@ -12,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 14195 on 2018/3/16.
@@ -92,5 +101,23 @@ public class OrderController {
         }
 
         return iOrderService.getOrderDetail(currentUser.getId(), orderNo);
+    }
+
+    /**
+     * 支付宝支付接口
+     * @param session
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "pay.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse pay(HttpSession session, Long orderNo, HttpServletRequest request){
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+
+        String path = request.getSession().getServletContext().getRealPath("upload");
+        return iOrderService.pay(orderNo, currentUser.getId(), path);
     }
 }

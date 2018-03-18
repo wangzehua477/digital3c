@@ -20,6 +20,7 @@
 //import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 //import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
 //import com.alipay.demo.trade.utils.Utils;
+//import com.alipay.demo.trade.utils.ZxingUtils;
 //import org.apache.commons.lang.StringUtils;
 //import org.apache.commons.logging.Log;
 //import org.apache.commons.logging.LogFactory;
@@ -98,24 +99,6 @@
 //
 //        // 测试当面付2.0生成支付二维码
 //        main.test_trade_precreate();
-//    }
-//
-//    // 测试系统商交易保障调度
-//    public void test_monitor_schedule_logic() {
-//        // 启动交易保障线程
-//        DemoHbRunner demoRunner = new DemoHbRunner(monitorService);
-//        demoRunner.setDelay(5); // 设置启动后延迟5秒开始调度，不设置则默认3秒
-//        demoRunner.setDuration(10); // 设置间隔10秒进行调度，不设置则默认15 * 60秒
-//        demoRunner.schedule();
-//
-//        // 启动当面付，此处每隔5秒调用一次支付接口，并且当随机数为0时交易保障线程退出
-//        while (Math.random() != 0) {
-//            test_trade_pay(tradeWithHBService);
-//            Utils.sleep(5 * 1000);
-//        }
-//
-//        // 满足退出条件后可以调用shutdown优雅安全退出
-//        demoRunner.shutdown();
 //    }
 //
 //    // 系统商的调用样例，填写了所有系统商商需要填写的字段
@@ -431,10 +414,10 @@
 //                dumpResponse(response);
 //
 //                // 需要修改为运行机器上的路径
-//                String filePath = String.format("/Users/sudo/Desktop/qr-%s.png",
+//                String filePath = String.format("E://qr-%s.png",
 //                    response.getOutTradeNo());
 //                log.info("filePath:" + filePath);
-//                //                ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
+//                ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
 //                break;
 //
 //            case FAILED:

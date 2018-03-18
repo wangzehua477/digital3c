@@ -325,7 +325,7 @@
                         layer.alert(result.msg, {icon:2});
                         console.log(result);
                     }else{
-                        console.log(result)
+                        location.href = "payment.html?orderNo=" + result.data.orderNo;
                     }
                 }, {forcedLogin: true});
             }

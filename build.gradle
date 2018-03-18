@@ -52,4 +52,8 @@ dependencies {
 
 	compile('org.springframework.boot:spring-boot-starter-websocket')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+
+	compile group: 'commons-net', name: 'commons-net', version: '3.3'
+	compile fileTree(dir:'libs',include:['*.jar'])
+
 }
