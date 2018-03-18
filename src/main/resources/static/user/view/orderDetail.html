@@ -1,10 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <link href="../../static/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../../static/plugins/layui/css/layui.css" rel="stylesheet" type="text/css"/>
+
     <title>3C数码-订单详情</title>
 </head>
 <body>
+<style>
+    li{
+        display:block;
+        float:left;
+        width: 73px;
+        height: 24px;
+    }
 
+    .productListTr td{
+        word-break:break-all;
+        display:table-cell;
+        vertical-align: middle!important;
+    }
+
+</style>
+<div style="background-color: #f0f0f0">
+    <div class="container">
+
+        <div id="topNav"></div>
+
+        <div id="searchForm" class="input-group" style="margin: 5px 100px 45px 100px;">
+            <span class="input-group-addon">3C数码</span>
+            <input type="text" class="form-control">
+            <span class="input-group-addon btn">搜索</span>
+        </div>
+
+        <hr style="border: #999 solid 1px; height: 0px"/>
+
+        <div style="margin-bottom: 25px">
+            <a href="index.html"><span style="color: grey" id="mouseChangeColor1">3CDigital</span></a>
+            <span style="color: grey">></span>
+            <a href="#"><span style="color: grey" id="mouseChangeColor2">订单详情</span></a>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">订单信息</div>
+            <table id="orderInfo" class="table">
+                <th style="width: 30%; height: 1px"></th><th></th>
+            </table>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    商品清单
+                </h3>
+            </div>
+            <div class="panel-body productList">
+                <div class="panel panel-default">
+                    <!-- 查询条件区域（可选） -->
+                    <div class="panel-body" style="position: relative;padding:0 0 15px 0;">
+                        <div class="table-responsive">
+                            <!-- 查询结果显示区域 -->
+                            <table id="productList" class="table table-responsive table-striped table-hover text-center"
+                                   style="border-bottom: 1px solid #ddd" id="products">
+                                <thead>
+                                <tr style="color:black;">
+                                    <th style="width: 10%">
+
+                                    </th>
+                                    <th class="text-center"  style="width: 30%" >
+                                        商品描述
+                                    </th>
+                                    <th class="text-center" style="width: 20%">
+                                        单价
+                                    </th>
+                                    <th class="text-center" style="width: 20%">
+                                        数量
+                                    </th>
+                                    <th class="text-center"  style="width: 20%">
+                                        合计
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                            <div style="overflow: hidden">
+                                <div class="pull-right" style="margin-right: 10px">
+                                    订单总价：<span id="totalPrice" style="margin-right: 10px; color: red; font-size: large"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="bottomNav"></div>
+    </div>
+</div>
+<script src="../../static/plugins/jQuery/jquery-1.12.1.min.js" type="text/javascript"></script>
+<script src="../../static/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.user.topnav.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.user.bottomNav.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.ajax.auth.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.config.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.extensions.js" type="text/javascript"></script>
+<script src="../../static/scripts/xingsu.util.js" type="text/javascript"></script>
+<script src="../../static/plugins/layer/layer.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        var $productListBody = $("#productList tbody");
+        var urlObject = $utils.parseUrl(location.href);
+        var orderNo = urlObject.params["orderNo"] || "null";
+        if(orderNo == "null"){
+            layer.alert("页面出错，请返回重试！", {icon:2, end:function () {
+                location.href = "index.html";
+            }});
+            window.setTimeout(function () {
+                location.href = "index.html";
+            }, 3000);
+        }
+
+        init();
+
+        var ajaxUrl = "../../order/detail.do?orderNo="+ orderNo;
+        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
+            if(!result.success){
+                console.log(result);
+                return;
+            }
+            var data = result.data;
+            console.log(result);
+            //填充订单信息
+            var orderInfoStr = "<tr><td style='padding: 10px'>订单号</td><td style='padding: 10px'>{0}</td></tr>" +
+                "<tr><td style='padding: 10px'>创建时间</td><td style='padding: 10px'>{1}</td></tr> " +
+                "<tr><td style='padding: 10px'>收货地址</td><td style='padding: 10px'>{2}</td></tr> " +
+                "<tr><td style='padding: 10px'>订单状态</td><td style='padding: 10px'>{3}</td></tr> " +
+                "<tr><td style='padding: 10px'>支付方式</td><td style='padding: 10px'>{4}</td></tr>" +
+                "<tr><td>" +
+                "<button id='pay' class='layui-btn layui-btn-normal layui-btn-sm hidden'>去支付</button>" +
+                "<button id='cancelOrder' class='layui-btn layui-btn-normal layui-btn-sm hidden'>取消订单</button>" +
+                "</td><td></td></tr>>" ;
+            var receiverAddressDetail = data.shippingVo.receiverProvince + data.shippingVo.receiverCity + data.shippingVo.receiverAddress + "&nbsp;" +
+                            data.shippingVo.receiverName + "收&nbsp;" + "手机号：" + data.shippingVo.receiverPhone;
+            orderInfoStr = String.format(orderInfoStr, data.orderNo, data.createTime, receiverAddressDetail, data.statusDesc, data.paymentTypeDesc);
+            $("#orderInfo").append(orderInfoStr);
+
+            //如果订单未支付，显示按钮
+            if(data.status == 10){
+                $("#pay").removeClass("hidden");
+            }
+            if(data.status >= 10 && data.status <= 40){     //订单还未完成状态下，可以取消订单
+                $("#cancelOrder").removeClass("hidden");
+            }
+
+            //填充商品清单
+            var productListStr = "<tr class='productListTr'>" +
+                "<td><a href='productDetail.html?productId={5}'><img src='{0}' style='width: 90px; height: 90px'/></a></td>" +
+                "<td><a style='color: #666' href='productDetail.html?productId={5}'>{1}</a></td>" +
+                "<td>￥{2}</td>" +
+                "<td>X{3}</td>" +
+                "<td>￥{4}</td>" +
+                "</tr>";
+            var productListStrTemp = "";
+            $.each(data.orderItemVoList, function (index, value) {
+                var image = "../../product/getImage?imageName=" + value.productImage;
+                productListStrTemp += String.format(productListStr, image, value.productName, value.currentUnitPrice, value.quantity, value.totalPrice, value.productId);
+            });
+            $productListBody.append(productListStrTemp);
+            $("#totalPrice").text("￥" + data.payment);
+        }, {forcedLogin: true});
+
+        function init(){
+            //鼠标移到的时候字显红色，移走恢复
+            mouseChangeColor("mouseChangeColor1");
+            mouseChangeColor("mouseChangeColor2");
+        }
+
+        //鼠标移动到指定元素改变颜色，鼠标指针从元素上移开再次恢复颜色
+        function mouseChangeColor(id) {
+            $("#"+ id).mouseover(function () {
+                $("#"+ id).css("color", "red");
+            });
+            $("#" + id).mouseout(function(){
+                $("#"+ id).css("color","grey");
+            });
+        }
+
+    });
+
+</script>
 </body>
 </html>

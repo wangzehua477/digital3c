@@ -149,7 +149,9 @@
                 username: username,
                 password: password
             }
+            $utils.loading.start();
             $ajax.ajax(ajaxUrl, data, $config.HttpVerbs.POST, function (result) {
+                $utils.loading.close();
                 if(!result.success){
                     layer.alert(result.msg, {icon: 2});
                     return;

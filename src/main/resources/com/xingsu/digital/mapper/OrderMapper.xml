@@ -205,4 +205,11 @@
     where user_id = #{userId}
     order by create_time desc
   </select>
+
+  <select id="selectByUserIdAndOrderNo" resultMap="BaseResultMap" parameterType="map">
+    select <include refid="Base_Column_List" />
+    from `order`
+    where order_no = #{orderNo}
+    and user_id = #{userId}
+  </select>
 </mapper>

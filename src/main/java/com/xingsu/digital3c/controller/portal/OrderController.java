@@ -76,4 +76,21 @@ public class OrderController {
 
         return iOrderService.getOrderList(currentUser.getId(), pageNum, pageSize);
     }
+
+    /**
+     * 获取订单详情接口
+     * @param session
+     * @param orderNo
+     * @return
+     */
+    @RequestMapping(value = "detail.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse detail(HttpSession session, Long orderNo) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+
+        return iOrderService.getOrderDetail(currentUser.getId(), orderNo);
+    }
 }

@@ -12,4 +12,6 @@ public interface IOrderService {
     ServerResponse createOrder(Integer userId, Integer shippingId);
 
     ServerResponse getOrderList(Integer id, int pageNum, int pageSize);
+
+    ServerResponse getOrderDetail(Integer id, Long orderNo);
 }
