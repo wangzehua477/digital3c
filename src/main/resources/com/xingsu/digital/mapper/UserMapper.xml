@@ -186,4 +186,23 @@
     and password = #{password}
   </select>
 
+  <select id="selectQuestionByUsername" resultType="string" parameterType="string">
+    select question
+    from `user`
+    where username = #{username}
+  </select>
+
+  <select id="checkAnswer" resultType="int" parameterType="map">
+    select count(1)
+    from `user`
+    where username = #{username}
+    and question = #{question}
+    and answer = #{answer}
+  </select>
+
+  <update id="updatePasswordByUsername" parameterType="map">
+    update `user`
+    set password = #{passwordNew},salt=#{salt}, update_time = now()
+    where username = #{username}
+  </update>
 </mapper>

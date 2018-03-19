@@ -2,6 +2,7 @@ package com.xingsu.digital3c.service.impl;
 
 import com.xingsu.digital3c.common.Const;
 import com.xingsu.digital3c.common.ServerResponse;
+import com.xingsu.digital3c.common.TokenCache;
 import com.xingsu.digital3c.dao.UserMapper;
 import com.xingsu.digital3c.pojo.User;
 import com.xingsu.digital3c.pojo.request.LoginRequest;
@@ -9,12 +10,11 @@ import com.xingsu.digital3c.service.IUserService;
 import com.xingsu.digital3c.util.Coder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Random;
 import java.util.UUID;
+
+import static com.xingsu.digital3c.common.TokenCache.TOKEN_PREFIX;
 
 
 @Service("iUserService")
@@ -91,17 +91,59 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ServerResponse selectQuestion(String username) {
-        return null;
+        ServerResponse validResponse = this.checkValid(username, Const.USERNAME);
+        if (validResponse.isSuccess()) {
+            return ServerResponse.createByErrorMessage("用户不存在");
+        }
+
+        String question = userMapper.selectQuestionByUsername(username);
+        if (StringUtils.isNotBlank(question)) {
+            return ServerResponse.createBySuccess(question);
+        }
+
+        return ServerResponse.createByErrorMessage("找回密码的问题是空的，只能联系管理员了！");
     }
 
     @Override
     public ServerResponse<String> checkAnswer(String username, String question, String answer) {
-        return null;
+        int resultCount = userMapper.checkAnswer(username, question, answer);
+        if (resultCount > 0) {
+            //说明问题及这个答案是这个用户的，并且是正确的
+            String forgetToken = UUID.randomUUID().toString();
+            TokenCache.setKey(TOKEN_PREFIX + username, forgetToken);
+            return ServerResponse.createBySuccess(forgetToken);
+        }
+
+        return ServerResponse.createByErrorMessage("问题的答案错误");
     }
 
     @Override
     public ServerResponse<String> forgetResetPassword(String username, String passwordNew, String forgetToken) {
-        return null;
+        if (StringUtils.isBlank(forgetToken) || StringUtils.isBlank(passwordNew)) {
+            return ServerResponse.createByErrorMessage("参数错误，token和新密码需要传递");
+        }
+        ServerResponse validResponse = this.checkValid(username, Const.USERNAME);
+        if (validResponse.isSuccess()) {
+            return ServerResponse.createByErrorMessage("用户不存在");
+        }
+
+        String token = TokenCache.getKey(TOKEN_PREFIX + username);
+        if (StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMessage("token无效或已过期");
+        }
+
+        if (StringUtils.equals(forgetToken, token)) {
+            String salt = UUID.randomUUID().toString();
+            String sha256Password = Coder.sha256(passwordNew + salt);
+            int rowCount = userMapper.updatePasswordByUsername(username, sha256Password, salt);
+
+            if (rowCount > 0) {
+                return ServerResponse.createBySuccessMessage("修改密码成功");
+            } else {
+                return ServerResponse.createByErrorMessage("token错误，请重新获取重置密码的token");
+            }
+        }
+        return ServerResponse.createByErrorMessage("修改密码失败");
     }
 
     @Override

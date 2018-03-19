@@ -200,7 +200,12 @@
                     console.log(result);
                     return ;
                 }
-                location.href = "login.html";
+                layer.alert(result.msg + ",请登陆！", {icon: 1, end: function () {
+                    location.href = "login.html";
+                }});
+                setTimeout(function () {
+                    location.href = "login.html";
+                },3000);
             });
         });
 
