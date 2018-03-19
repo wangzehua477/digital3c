@@ -172,7 +172,18 @@
             });
             $productListBody.append(productListStrTemp);
             $("#totalPrice").text("￥" + data.payment);
+
+            //去支付按钮
+            $("#pay").click(function () {
+                location.href = "payment.html?orderNo=" + data.orderNo;
+            });
+
+            //取消订单按钮
+            $("#cancelOrder").click(function () {
+               layer.alert("暂时不允许取消订单！", {icon: 5});
+            });
         }, {forcedLogin: true});
+
 
         function init(){
             //鼠标移到的时候字显红色，移走恢复

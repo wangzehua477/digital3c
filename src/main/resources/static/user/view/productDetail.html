@@ -223,14 +223,14 @@
                     layer.alert("添加的物品超过目前的库存，已帮您自动选择最大库存值！", {
                             icon: 7,
                             end: function () {
-                                location.href = "result.html";
+                                location.href = "result.html?type=productDetail";
                             }}
                     );
                     setTimeout(function () {
-                        location.href = "result.html";
+                        location.href = "result.html?type=productDetail";
                     }, 2000);
                 }else{
-                    location.href = "result.html";
+                    location.href = "result.html?type=productDetail";
                 }
 
             }, {forcedLogin: true});

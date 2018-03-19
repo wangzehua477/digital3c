@@ -65,6 +65,9 @@ public class OrderServiceImpl implements IOrderService{
     @Autowired
     private ShippingMapper shippingMapper;
 
+    @Autowired
+    private PayInfoMapper payInfoMapper;
+
     @Override
     public ServerResponse getOrderCartProduct(Integer userId) {
         OrderProductVo orderProductVo = new OrderProductVo();
@@ -266,6 +269,50 @@ public class OrderServiceImpl implements IOrderService{
                 logger.error("不支持的交易状态，交易返回异常!!!");
                 return ServerResponse.createByErrorMessage("不支持的交易状态，交易返回异常!!!");
         }
+    }
+
+    @Override
+    public ServerResponse aliCallback(Map<String, String> params) {
+        Long orderNo = Long.parseLong(params.get("out_trade_no"));
+        String tradeNo = params.get("trade_no");
+        String tradeStatus = params.get("trade_status");
+
+        Order order = orderMapper.selectByOrderNo(orderNo);
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("非mmall的订单号，请忽略");
+        }
+        if (order.getStatus() >= Const.OrderStatusEnum.PAID.getCode()) {
+            return ServerResponse.createBySuccess("支付宝重复调用");
+        }
+        if (Const.AlipayCallback.TRADE_STATUS_TRADE_SUCCESS.equals(tradeStatus)) {
+            order.setPaymentTime(DateTimeUtil.strToDate(params.get("gmt_payment")));
+            order.setStatus(Const.OrderStatusEnum.PAID.getCode());
+            orderMapper.updateByPrimaryKeySelective(order);
+        }
+
+        PayInfo payInfo = new PayInfo();
+        payInfo.setUserId(order.getUserId());
+        payInfo.setOrderNo(order.getOrderNo());
+        payInfo.setPayPlatform(Const.PayPlatformEnum.ALIPAY.getCode());
+        payInfo.setPlatformNumber(tradeNo);
+        payInfo.setPlatformStatus(tradeStatus);
+
+        payInfoMapper.insert(payInfo);
+
+        return ServerResponse.createBySuccess();
+    }
+
+    @Override
+    public ServerResponse queryOrderPayStatus(Integer userId, Long orderNo) {
+        Order order = orderMapper.selectByUserIdAndOrderNo(userId, orderNo);
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("用户没有该订单");
+        }
+        if (order.getStatus() >= Const.OrderStatusEnum.PAID.getCode()) {
+            return ServerResponse.createBySuccess();
+        }
+
+        return ServerResponse.createByError();
     }
 
     // 简单打印应答
