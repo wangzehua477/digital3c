@@ -182,13 +182,15 @@
     <include refid="Base_Column_List"/>
     from shipping
     where user_id = #{userId}
+    and status = 0
   </select>
 
-  <delete id="deleteByShippingIdUserId" parameterType="map">
-    delete from shipping
+  <update id="deleteByShippingIdUserId" parameterType="map">
+    update shipping
+    set status = 1
     where id = #{shippingId}
     and user_id = #{userId}
-  </delete>
+  </update>
 
   <update id="updateByShipping" parameterType="com.xingsu.digital3c.pojo.Shipping">
     update shipping
@@ -213,5 +215,6 @@
     from shipping
     where id = #{shippingId}
     and user_id = #{userId}
+    and status = 0
   </select>
 </mapper>

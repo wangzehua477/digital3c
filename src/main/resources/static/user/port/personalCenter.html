@@ -84,6 +84,7 @@
                 <div class="layui-tab-item" id="orderList">
 
                 </div>
+                <div id='paging' style='text-align: center'></div>
 
                 <div class="layui-tab-item">
                     <form class="layui-form">
@@ -129,6 +130,9 @@
 
 <script type="text/javascript">
     $(function () {
+        var resultTotal;
+        var isFirst = true;
+
         var urlObject = $utils.parseUrl(location.href);
         var type = urlObject.params["type"] || "null";
 
@@ -246,52 +250,64 @@
             "<div style='width: 15% ;text-align: center; line-height: 90px;float: left'>￥{2}</div> " +
             "<div style='width: 10%; text-align: center; line-height: 90px;float: left'>X{3}</div> " +
             "<div style='width: 15%; text-align: center; line-height: 90px;float: left'>￥{4}</div></div>";
-        var orderHeadingStrTemp = "";
-        var orderBodyStrTemp = "";
-        var orderStrTemp = "";
+
         //我的订单- ajax请求后台数据
-        var ajaxUrl = "../../order/list.do";
-        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
-            console.log(result)
-            if(!result.success){
-                layer.alert(result.msg,{icon:2});
-            }else{
-                console.log(result)
-                $.each(result.data.list, function (index, value) {
-                    orderBodyStrTemp = "";
-                    //订单头部填充
-                    orderHeadingStrTemp = String.format(orderHeadingStr, value.orderNo, value.createTime, "收件人：" +
-                        value.shippingVo.receiverName, "订单状态：" + value.statusDesc, "￥" + value.payment, value.orderNo );
+        myOrder(1, 10)
 
-                    //订单body填充
-                    $.each(value.orderItemVoList, function (index2, value2) {
-                        var image = "../../product/getImage?imageName=" + value2.productImage;
-                        orderBodyStrTemp += String.format(orderBodyStr, image, value2.productName, value2.currentUnitPrice, value2.quantity, value2.totalPrice, value2.productId);
+        function myOrder(pageNum, pageSize){
+            var orderHeadingStrTemp = "";
+            var orderBodyStrTemp = "";
+            var orderStrTemp = "";
+            $("#orderList").empty();
+
+            var ajaxUrl = "../../order/list.do?pageNum=" + pageNum + "&pageSize=" + pageSize;
+            $utils.loading.start();
+            $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
+                $utils.loading.close();
+                if(!result.success){
+                    layer.alert(result.msg,{icon:2});
+                }else{
+                    console.log(result)
+                    $.each(result.data.list, function (index, value) {
+                        orderBodyStrTemp = "";
+                        //订单头部填充
+                        orderHeadingStrTemp = String.format(orderHeadingStr, value.orderNo, value.createTime, "收件人：" +
+                            value.shippingVo.receiverName, "订单状态：" + value.statusDesc, "￥" + value.payment, value.orderNo );
+
+                        //订单body填充
+                        $.each(value.orderItemVoList, function (index2, value2) {
+                            var image = "../../product/getImage?imageName=" + value2.productImage;
+                            orderBodyStrTemp += String.format(orderBodyStr, image, value2.productName, value2.currentUnitPrice, value2.quantity, value2.totalPrice, value2.productId);
+                        });
+                        //单条订单组装
+                        orderStrTemp += String.format(orderStr, orderHeadingStrTemp, orderBodyStrTemp);
                     });
-                    //单条订单组装
-                    orderStrTemp += String.format(orderStr, orderHeadingStrTemp, orderBodyStrTemp);
-                });
-                orderStrTemp += "<div id='paging'></div>";
-                $("#orderList").append(orderStrTemp);
+                    $("#orderList").append(orderStrTemp);
 
-                    //分页插件
-                layui.use(['laypage', 'layer'], function(){
-                    var laypage = layui.laypage
-                        ,layer = layui.layer;
+                    resultTotal = result.data.total;
+                }
+            }, {forcedLogin: true, async: false});
+        }
 
-                    //完整功能
-                    laypage.render({
-                        elem: 'paging'
-                        ,count: 100
-                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
-                        ,jump: function(obj){
-                            console.log(obj)
-                        }
-                    });
-                });
-
-            }
-        }, {forcedLogin: true});
+        //分页插件
+        layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage
+                ,layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'paging'
+                ,count: resultTotal
+                ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                ,jump: function(obj){
+                    console.log(obj)
+                    if(isFirst){
+                        isFirst = false;
+                    }else{
+                        myOrder(obj.curr, obj.limit);
+                    }
+                }
+            });
+        });
 
         function init(){
             //鼠标移到的时候字显红色，移走恢复
