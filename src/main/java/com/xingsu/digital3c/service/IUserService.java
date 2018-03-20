@@ -1,6 +1,7 @@
 package com.xingsu.digital3c.service;
 
 
+import com.github.pagehelper.PageInfo;
 import com.xingsu.digital3c.common.ServerResponse;
 import com.xingsu.digital3c.pojo.User;
 import com.xingsu.digital3c.pojo.request.LoginRequest;

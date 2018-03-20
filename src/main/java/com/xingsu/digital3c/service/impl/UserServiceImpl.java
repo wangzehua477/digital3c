@@ -1,5 +1,6 @@
 package com.xingsu.digital3c.service.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.xingsu.digital3c.common.Const;
 import com.xingsu.digital3c.common.ServerResponse;
 import com.xingsu.digital3c.common.TokenCache;

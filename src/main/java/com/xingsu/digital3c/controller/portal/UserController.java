@@ -1,9 +1,11 @@
 package com.xingsu.digital3c.controller.portal;
 
 
+import com.github.pagehelper.PageInfo;
 import com.xingsu.digital3c.common.Const;
 import com.xingsu.digital3c.common.ResponseCode;
 import com.xingsu.digital3c.common.ServerResponse;
+import com.xingsu.digital3c.pojo.Product;
 import com.xingsu.digital3c.pojo.User;
 import com.xingsu.digital3c.pojo.request.LoginRequest;
 import com.xingsu.digital3c.service.IUserService;
@@ -185,4 +187,5 @@ public class UserController {
         }
         return iUserService.getInformation(currentUser.getId());
     }
+
 }

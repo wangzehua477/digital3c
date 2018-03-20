@@ -65,51 +65,8 @@
 
     <h3>3C 为你推荐 TODO 暂未实现</h3>
 
-    <div class="row" style="background-color: #f0f0f0">
-        <div class="col-sm-6 col-md-3 col-lg-3">
-            <div class="thumbnail" style="margin-top: 13px">
-                <img style="width: 130px; height: 155px;margin-top: 12px" src="../../static/images/xiaomiNote3.jpg" alt="小米note3"/>
-                <div class="caption" style="text-align: center">
-                    <p>小米note3 拍照美，拍人更美！</p>
-                    <p style="color:#ed2441; text-align: center">
-                        ￥1999
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-3 col-lg-3">
-            <div class="thumbnail" style="margin-top: 13px">
-                <img style="width: 130px; height: 155px;margin-top: 12px" src="../../static/images/xiaomiNote3.jpg" alt="小米note3"/>
-                <div class="caption" style="text-align: center">
-                    <p>小米note3 拍照美，拍人更美！</p>
-                    <p style="color:#ed2441; text-align: center">
-                        ￥1999
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-3 col-lg-3">
-            <div class="thumbnail" style="margin-top: 13px">
-                <img style="width: 130px; height: 155px;margin-top: 12px" src="../../static/images/xiaomiNote3.jpg" alt="小米note3"/>
-                <div class="caption" style="text-align: center">
-                    <p>小米note3 拍照美，拍人更美！</p>
-                    <p style="color:#ed2441; text-align: center">
-                        ￥1999
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-3 col-lg-3" id="1111111">
-            <div class="thumbnail" style="margin-top: 13px">
-                <img style="width: 130px; height: 155px;margin-top: 12px" src="../../static/images/xiaomiNote3.jpg" alt="小米note3"/>
-                <div class="caption" style="text-align: center">
-                    <p>小米note3 拍照美，拍人更美！</p>
-                    <p style="color:#ed2441; text-align: center">
-                        ￥1999
-                    </p>
-                </div>
-            </div>
-        </div>
+    <div id="RPDiv" class="row" style="background-color: #f0f0f0">
+
     </div>
 
     <div id="column">
@@ -228,21 +185,35 @@
 
 
         //为你推荐
-        var hasUserInfo = false;            //是否有用户信息       如果有用户信息，则根据用户推荐，如果没有用户信息，则随机推荐
-//        var ajaxUrl = "";
-//        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
-//            if(!result.success){
-//                console.log(result);
-//                return;
-//            }
-//            var columnItemTemp="";
-//            $.each(result.data.list, function (index, value) {
-//                var mainImage = "../../product/getImage?imageName=" + value.mainImage;
-//                columnItemTemp += String.format(columnItem, mainImage, value.subtitle, value.price, value.id);
-//            });
-//            var columnTemp = String.format(column, index, columnItemTemp);
-//            $("#column").append(columnTemp);
-//        }, {async: false});
+        var RPDivStr = "<div class='col-sm-6 col-md-3 col-lg-3'> " +
+            "<div class='thumbnail' style='margin-top: 13px'> " +
+            "<img style='width: 130px; height: 155px;margin-top: 12px' src='{0}'/> " +
+            "<div class='caption' style='text-align: center'> " +
+            "<p>{1}小米note3 拍照美，拍人更美！</p> " +
+            "<p style='color:#ed2441; text-align: center'>" +
+            "￥{2} " +
+            "</p>" +
+            "</div>" +
+            "</div> " +
+            "</div>";
+        var hasUserInfo = false;            // todo 是否有用户信息       如果有用户信息，则根据用户推荐，如果没有用户信息，则随机推荐
+        var ajaxUrl = "../../product/get_recommend_product.do";
+
+        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
+            if(!result.success){
+                console.log(result);
+                return;
+            }
+            var RPDivStrTemp="";
+            $.each(result.data, function (index, value) {
+                if(index > 3)
+                    return false;
+                var image = "../../product/getImage?imageName=" + value.mainImage;
+                RPDivStrTemp += String.format(RPDivStr, image, value.subtitle, value.price);
+            });
+
+            $("#RPDiv").append(RPDivStrTemp);
+        });
 
     });
 

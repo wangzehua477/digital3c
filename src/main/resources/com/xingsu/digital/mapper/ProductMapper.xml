@@ -196,4 +196,11 @@
       </foreach>
     </if>
   </select>
+
+  <select id="selectRecommendProduct" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from product
+    order by `count` desc
+    limit 100
+  </select>
 </mapper>

@@ -1,7 +1,9 @@
 package com.xingsu.digital3c.controller.portal;
 
 import com.github.pagehelper.PageInfo;
+import com.xingsu.digital3c.common.Const;
 import com.xingsu.digital3c.common.ServerResponse;
+import com.xingsu.digital3c.pojo.User;
 import com.xingsu.digital3c.service.IProductService;
 import com.xingsu.digital3c.util.PropertiesUtil;
 import com.xingsu.digital3c.vo.ProductDetailVo;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
 import java.util.List;
@@ -84,5 +87,16 @@ public class ProductController {
             logger.error("PictureController.find error, ", e);
         }
         return null;
+    }
+
+
+    //推荐商品
+    @RequestMapping(value="get_recommend_product.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<List<ProductListVo>> get_recommend_product(HttpSession session){
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if(currentUser == null)
+            return iProductService.getRecommendProduct();
+        return iProductService.getRecommendProductByUser();
     }
 }

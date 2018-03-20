@@ -127,6 +127,29 @@ public class ProductServiceImpl implements IProductService {
         return ServerResponse.createBySuccess(pageInfo);
     }
 
+    @Override
+    public ServerResponse<List<ProductListVo>> getRecommendProduct() {
+        List<Product> productList = productMapper.selectRecommendProduct();
+        List<ProductListVo> productListVoList = Lists.newArrayList();
+        for(Product product : productList){
+            ProductListVo productListVo = assembleProductListVo(product);
+            productListVoList.add(productListVo);
+        }
+        return ServerResponse.createBySuccess(productListVoList);
+    }
+
+    //todo  根据用户去推荐商品
+    @Override
+    public ServerResponse<List<ProductListVo>> getRecommendProductByUser() {
+        List<Product> productList = productMapper.selectRecommendProduct();
+        List<ProductListVo> productListVoList = Lists.newArrayList();
+        for(Product product : productList){
+            ProductListVo productListVo = assembleProductListVo(product);
+            productListVoList.add(productListVo);
+        }
+        return ServerResponse.createBySuccess(productListVoList);
+    }
+
     private ProductDetailVo assembleProductDetailVo(Product product) {
         ProductDetailVo productDetailVo = new ProductDetailVo();
         productDetailVo.setId(product.getId());
