@@ -184,4 +184,10 @@
     where order_no = #{orderNo}
     and user_id = #{userId}
   </select>
+
+  <select id="getByOrderNo" resultMap="BaseResultMap" parameterType="map">
+    select <include refid="Base_Column_List" />
+    from order_item
+    where order_no = #{orderNo}
+  </select>
 </mapper>

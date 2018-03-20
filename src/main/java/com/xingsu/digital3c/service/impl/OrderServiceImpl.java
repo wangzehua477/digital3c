@@ -299,6 +299,14 @@ public class OrderServiceImpl implements IOrderService{
 
         payInfoMapper.insert(payInfo);
 
+        //商品出售计数
+        List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(orderNo);
+        for (OrderItem orderItem : orderItemList) {
+            Product product = productMapper.selectByPrimaryKey(orderItem.getProductId());
+            product.setCount(product.getCount() + 1);
+            productMapper.updateByPrimaryKey(product);
+        }
+
         return ServerResponse.createBySuccess();
     }
 

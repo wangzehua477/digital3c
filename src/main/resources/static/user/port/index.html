@@ -131,9 +131,10 @@
 
 <script type="text/javascript">
     $(function () {
-
+        var currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
         var $navigation = $("#navigation");             //导航索引div
         var ajaxUrl = "../../category/get_category.do?categoryId=100001";
+
         $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
             if(!result.success){
                 console.log(result);
@@ -205,6 +206,8 @@
                 }
                 var columnItemTemp="";
                 $.each(result.data.list, function (index, value) {
+                    if(index > 3)
+                        return false;
                     var mainImage = "../../product/getImage?imageName=" + value.mainImage;
                     columnItemTemp += String.format(columnItem, mainImage, value.subtitle, value.price, value.id);
                 });
@@ -222,6 +225,25 @@
                 location.href = "itemList.html?categoryId=100001&keyword=" + $("#searchKeyword").val();
             }
         });
+
+
+        //为你推荐
+        var hasUserInfo = false;            //是否有用户信息       如果有用户信息，则根据用户推荐，如果没有用户信息，则随机推荐
+//        var ajaxUrl = "";
+//        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
+//            if(!result.success){
+//                console.log(result);
+//                return;
+//            }
+//            var columnItemTemp="";
+//            $.each(result.data.list, function (index, value) {
+//                var mainImage = "../../product/getImage?imageName=" + value.mainImage;
+//                columnItemTemp += String.format(columnItem, mainImage, value.subtitle, value.price, value.id);
+//            });
+//            var columnTemp = String.format(column, index, columnItemTemp);
+//            $("#column").append(columnTemp);
+//        }, {async: false});
+
     });
 
 </script>
