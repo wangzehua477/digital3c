@@ -22,8 +22,8 @@
 
         <div id="searchForm" class="input-group" style="margin: 5px 100px 45px 100px;">
             <span class="input-group-addon">3C数码</span>
-            <input type="text" class="form-control">
-            <span class="input-group-addon btn">搜索</span>
+            <input id="searchKeyword" type="text" class="form-control" placeholder="请输入商品名称">
+            <span id="search" class="input-group-addon btn" >搜索</span>
         </div>
 
         <hr style="border: #999 solid 1px; height: 0px"/>
@@ -235,6 +235,16 @@
 
             }, {forcedLogin: true});
         });
+
+        //搜索点击事件
+        $("#search").click(function () {
+            if($("#searchKeyword").val().length <= 0){
+                location.href = "itemList.html?categoryId=100001";
+            }else{
+                location.href = "itemList.html?categoryId=100001&keyword=" + $("#searchKeyword").val();
+            }
+        });
+
     });
 
 </script>

@@ -23,8 +23,8 @@
 
         <div id="searchForm" class="input-group" style="margin: 5px 100px 45px 100px;">
             <span class="input-group-addon">3C数码</span>
-            <input type="text" class="form-control">
-            <span class="input-group-addon btn">搜索</span>
+            <input id="searchKeyword" type="text" class="form-control" placeholder="请输入商品名称">
+            <span id="search" class="input-group-addon btn">搜索</span>
         </div>
 
         <hr style="border: #999 solid 1px; height: 0px"/>
@@ -84,7 +84,7 @@
                 <div class="layui-tab-item" id="orderList">
 
                 </div>
-                <div id='paging' style='text-align: center'></div>
+                <div id='paging' style='text-align: center' class="hidden"></div>
 
                 <div class="layui-tab-item">
                     <form class="layui-form">
@@ -130,23 +130,29 @@
 
 <script type="text/javascript">
     $(function () {
-        var resultTotal;
-        var isFirst = true;
+        var resultTotal = -1;           //页面订单总条数
+        var isFirst = true;             //是否第一次进入
+        var currentLi = -1;             //当前的li
 
         var urlObject = $utils.parseUrl(location.href);
-        var type = urlObject.params["type"] || "null";
+        var type = urlObject.params["type"] || null;
 
         var currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
         init();
 
         $(".itemUl li").click(function () {
-            var index = $(this).index();
+            currentLi = $(this).index();
+            if(resultTotal > 10 && currentLi == 1){
+                $("#paging").removeClass("hidden");
+            }else{
+                $("#paging").addClass("hidden");
+            }
            $(this).addClass("layui-this").siblings("li").removeClass("layui-this");
-           $(this).parent(".itemUl").siblings(".itemDiv").find(".layui-tab-item").eq(index).addClass("layui-show").siblings("div").removeClass("layui-show");
+           $(this).parent(".itemUl").siblings(".itemDiv").find(".layui-tab-item").eq($(this).index()).addClass("layui-show").siblings("div").removeClass("layui-show");
         });
 
         if(type == "order"){
-            type = "trashOrder";
+            $("#paging").removeClass("hidden");
             $(".itemUl li").eq(1).trigger("click");
         }
 
@@ -285,8 +291,17 @@
                     $("#orderList").append(orderStrTemp);
 
                     resultTotal = result.data.total;
+
+                    if(resultTotal > 10 && currentLi == 1){
+                        $("#paging").removeClass("hidden");
+                    }
                 }
             }, {forcedLogin: true, async: false});
+        }
+
+        if(resultTotal <= 0){
+            $("#orderList").append("<h3 style='text-align: center; color: #666;margin: 50px 10px;'>您目前没有订单记录</h3>");
+            return ;
         }
 
         //分页插件
@@ -325,6 +340,14 @@
             });
         }
 
+        //搜索点击事件
+        $("#search").click(function () {
+            if($("#searchKeyword").val().length <= 0){
+                location.href = "itemList.html?categoryId=100001";
+            }else{
+                location.href = "itemList.html?categoryId=100001&keyword=" + $("#searchKeyword").val();
+            }
+        });
 
     });
 

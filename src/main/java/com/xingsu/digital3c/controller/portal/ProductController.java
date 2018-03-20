@@ -1,5 +1,6 @@
 package com.xingsu.digital3c.controller.portal;
 
+import com.github.pagehelper.PageInfo;
 import com.xingsu.digital3c.common.ServerResponse;
 import com.xingsu.digital3c.service.IProductService;
 import com.xingsu.digital3c.util.PropertiesUtil;
@@ -29,17 +30,23 @@ public class ProductController {
     @Autowired
     private IProductService iProductService;
 
-
     /**
-     * 根据商品分类查询列表
+     * 根据商品关键字和分类查询列表
+     * @param keyword
      * @param categoryId
+     * @param pageNum
+     * @param pageSize
+     * @param orderBy
      * @return
      */
-    @RequestMapping(value = "listByCategoryId", method = RequestMethod.GET)
+    @RequestMapping(value = "list.do", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<List<ProductListVo>> list(@RequestParam(value = "categoryId") Integer categoryId,
-                                                    @RequestParam(value = "limit", defaultValue = "4") Integer limit){
-        return iProductService.getProductByCategory(categoryId, limit);
+    public ServerResponse<PageInfo> list(@RequestParam(value = "keyword", required = false) String keyword,
+                                         @RequestParam(value = "categoryId", required = false)Integer categoryId,
+                                         @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                         @RequestParam(value = "pageSize", defaultValue = "10")int pageSize,
+                                         @RequestParam(value = "orderBy", defaultValue = "")String orderBy){
+        return iProductService.getProductByKeywordCategory(keyword, categoryId, pageNum, pageSize, orderBy);
     }
 
     /**
@@ -47,7 +54,7 @@ public class ProductController {
      * @param productId
      * @return
      */
-    @RequestMapping("detail.do")
+    @RequestMapping(value = "detail.do",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<ProductDetailVo> detail(Integer productId){
         return iProductService.getProductDetail(productId);

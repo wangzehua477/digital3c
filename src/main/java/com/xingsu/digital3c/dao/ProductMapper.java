@@ -20,5 +20,6 @@ public interface ProductMapper {
 
     int updateByPrimaryKey(Product record);
 
-    List<Product> selectByCategoryIds(@Param("categoryIdList") List<Integer> categoryIdList, @Param("limit") Integer limit);
+    List<Product> selectByNameAndCategoryIds(@Param("productName") String productName, @Param("categoryIdList") List<Integer> categoryIdList);
+
 }

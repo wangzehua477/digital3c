@@ -22,8 +22,8 @@
 
     <div id="searchForm" class="input-group" style="margin: 5px 100px 20px 100px;">
         <span class="input-group-addon">3C数码</span>
-        <input type="text" class="form-control">
-        <span class="input-group-addon btn">搜索</span>
+        <input id="searchKeyword" type="text" class="form-control" placeholder="请输入商品名称">
+        <span id="search" class="input-group-addon btn" >搜索</span>
     </div>
 
     <div style="height:400px; overflow: hidden">
@@ -197,14 +197,14 @@
                 "                </div>\n" +
                 "            </div>";
 
-            ajaxUrl = "../../product/listByCategoryId?categoryId="+categoryId;
+            ajaxUrl = "../../product/list.do?categoryId="+categoryId;
             $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
                 if(!result.success){
                     console.log(result);
                     return;
                 }
                 var columnItemTemp="";
-                $.each(result.data, function (index, value) {
+                $.each(result.data.list, function (index, value) {
                     var mainImage = "../../product/getImage?imageName=" + value.mainImage;
                     columnItemTemp += String.format(columnItem, mainImage, value.subtitle, value.price, value.id);
                 });
@@ -214,6 +214,14 @@
 
         }
 
+        //搜索点击事件
+        $("#search").click(function () {
+            if($("#searchKeyword").val().length <= 0){
+                location.href = "itemList.html?categoryId=100001";
+            }else{
+                location.href = "itemList.html?categoryId=100001&keyword=" + $("#searchKeyword").val();
+            }
+        });
     });
 
 </script>

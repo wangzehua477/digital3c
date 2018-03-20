@@ -32,8 +32,8 @@
 
         <div id="searchForm" class="input-group" style="margin: 5px 100px 45px 100px;">
             <span class="input-group-addon">3C数码</span>
-            <input type="text" class="form-control">
-            <span class="input-group-addon btn">搜索</span>
+            <input id="searchKeyword" type="text" class="form-control" placeholder="请输入商品名称">
+            <span id="search" class="input-group-addon btn" >搜索</span>
         </div>
 
         <hr style="border: #999 solid 1px; height: 0px"/>
@@ -77,12 +77,17 @@
         var urlObject = $utils.parseUrl(location.href);
         var productList = [];
         var productListTemp = [];
-        var categoryId = urlObject.params["categoryId"] || "null";
-        if(categoryId == "null"){
+        var categoryId = urlObject.params["categoryId"] || "";
+        var keyword = urlObject.params["keyword"] || "";
+        if(categoryId == "" && keyword == ""){
             layer.alert("页面出错，请返回重试！");
             window.setTimeout(function () {
                 location.href = "index.html";
             }, 3000);
+        }
+
+        if(keyword.length > 0){
+            $("#searchKeyword").val(keyword);
         }
 
         init();
@@ -100,15 +105,16 @@
             "                       </a>\n" +
             "                    </div>\n" +
             "                </li>";
-        var ajaxUrl = "../../product/listByCategoryId?categoryId="+categoryId;
+        var ajaxUrl = "../../product/list.do?categoryId="+categoryId +
+            "&keyword=" + keyword;
         $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
             if(!result.success){
                 console.log(result);
                 return;
             }
-
+            console.log(result)
             var productItemStrTemp = "";
-            $.each(result.data, function (index, value) {
+            $.each(result.data.list, function (index, value) {
                 var mainImage = "../../product/getImage?imageName=" + value.mainImage;
                 productItemStrTemp += String.format(productItemStr, mainImage, value.subtitle, value.price, value.id);
                 productList.push(value);
@@ -210,6 +216,15 @@
                 $("#"+ id).css("color","grey");
             });
         }
+
+        //搜索点击事件
+        $("#search").click(function () {
+            if($("#searchKeyword").val().length <= 0){
+                location.href = "itemList.html?categoryId=" + categoryId;
+            }else{
+                location.href = "itemList.html?categoryId=" + categoryId +"&keyword=" + $("#searchKeyword").val();
+            }
+        });
     });
 
 </script>
