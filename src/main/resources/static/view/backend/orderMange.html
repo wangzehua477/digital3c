@@ -12,7 +12,7 @@
 <div style="padding-left: 10%; padding-right: 10%">
 
     <ul class="layui-nav">
-        <li class="layui-nav-item layui-this" >
+        <li class="layui-nav-item" >
             <a href="index.html">Home</a>
         </li>
         <li class="layui-nav-item ">
@@ -21,12 +21,11 @@
         <li class="layui-nav-item">
             <a href="categoryMange.html">类别管理</a>
         </li>
-        <li class="layui-nav-item">
+        <li class="layui-nav-item layui-this">
             <a href="orderMange.html">订单管理</a>
         </li>
     </ul>
 
-    <h1 style="text-align: center; margin-top: 200px; color:#666">欢迎来到后台管理页面</h1>
 
 
 </div>
@@ -40,15 +39,7 @@
 <script src="../../static/plugins/layui/layui.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(function () {
-        layui.use('element', function(){
-            var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
 
-            //监听导航点击
-            element.on('nav(demo)', function(elem){
-                //console.log(elem)
-                layer.msg(elem.text());
-            });
-        });
 
     });
 

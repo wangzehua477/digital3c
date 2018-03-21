@@ -12,11 +12,11 @@
 <div style="padding-left: 10%; padding-right: 10%">
 
     <ul class="layui-nav">
-        <li class="layui-nav-item layui-this" >
+        <li class="layui-nav-item" >
             <a href="index.html">Home</a>
         </li>
-        <li class="layui-nav-item ">
-            <a href="productMange.html">商品管理</a>
+        <li class="layui-nav-item layui-this">
+            <a href="productMange.html ">商品管理</a>
         </li>
         <li class="layui-nav-item">
             <a href="categoryMange.html">类别管理</a>
@@ -26,7 +26,7 @@
         </li>
     </ul>
 
-    <h1 style="text-align: center; margin-top: 200px; color:#666">欢迎来到后台管理页面</h1>
+    <table class="layui-hide" id="productTable"></table>
 
 
 </div>
@@ -40,16 +40,26 @@
 <script src="../../static/plugins/layui/layui.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(function () {
-        layui.use('element', function(){
-            var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+        layui.use('table', function(){
+            var table = layui.table;
 
-            //监听导航点击
-            element.on('nav(demo)', function(elem){
-                //console.log(elem)
-                layer.msg(elem.text());
+            table.render({
+                elem: '#productTable'
+                ,url:'/productTable/'
+                ,cols: [[
+                    {field:'id', width:80, title: 'ID', sort: true}
+                    ,{field:'username', width:80, title: '用户名'}
+                    ,{field:'sex', width:80, title: '性别', sort: true}
+                    ,{field:'city', width:80, title: '城市'}
+                    ,{field:'sign', title: '签名', minWidth: 150}
+                    ,{field:'experience', width:80, title: '积分', sort: true}
+                    ,{field:'score', width:80, title: '评分', sort: true}
+                    ,{field:'classify', width:80, title: '职业'}
+                    ,{field:'wealth', width:135, title: '财富', sort: true}
+                ]]
+                ,page: true
             });
         });
-
     });
 
 </script>
