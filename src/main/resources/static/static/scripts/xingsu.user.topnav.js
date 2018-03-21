@@ -16,7 +16,7 @@ $(function () {
     var str = "<nav class=\"navbar navbar-default\" role=\"navigation\" style='width: 1100px'>\n" +
         "        <div class=\"container-fluid\" style='background-color: #e3e4e5'>\n" +
         "            <div class=\"navbar-header\">\n" +
-        "                <a class=\"navbar-brand\" href='/user/port/index.html'><span class=\"glyphicon glyphicon-home\">3C数码</a>\n" +
+        "                <a class=\"navbar-brand\" href='/view/port/index.html'><span class=\"glyphicon glyphicon-home\">3C数码</a>\n" +
         "            </div>\n" +
         "            <div>\n" +
         "                <!--向右对齐-->\n" +
@@ -30,7 +30,7 @@ $(function () {
         "    </nav>";
     $("#topNav").html(str);
 
-    var ajaxUrl = "../../user/get_information.do";
+    var ajaxUrl = "../../view/get_information.do";
     $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
         // if(result.status == 10){
         //     if(forcedLogin){
@@ -54,7 +54,7 @@ $(function () {
 
             $("#register").click(function () {
 
-                $ajax.ajax("../../user/logout.do", null, $config.HttpVerbs.POST, function (result) {
+                $ajax.ajax("../../view/logout.do", null, $config.HttpVerbs.POST, function (result) {
                     if(!result.success){
                         layer.alert("账户异常，请重试");
                         setTimeout(function () {

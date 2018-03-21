@@ -25,8 +25,8 @@ public class CategoryController {
     @RequestMapping(value = "get_category.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse getChildrenParallelCategory(HttpSession session,@RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId){
-//        User user = (User) session.getAttribute(Const.CURRENT_USER);
-//        if(user == null){
+//        User view = (User) session.getAttribute(Const.CURRENT_USER);
+//        if(view == null){
 //            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录");
 //        }
         return iCategoryService.getChildrenParallelCategory(categoryId);

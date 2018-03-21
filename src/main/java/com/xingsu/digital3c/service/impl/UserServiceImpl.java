@@ -1,6 +1,5 @@
 package com.xingsu.digital3c.service.impl;
 
-import com.github.pagehelper.PageInfo;
 import com.xingsu.digital3c.common.Const;
 import com.xingsu.digital3c.common.ServerResponse;
 import com.xingsu.digital3c.common.TokenCache;
@@ -20,7 +19,6 @@ import static com.xingsu.digital3c.common.TokenCache.TOKEN_PREFIX;
 
 @Service("iUserService")
 public class UserServiceImpl implements IUserService {
-
     @Autowired
     private UserMapper userMapper;
 
