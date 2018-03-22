@@ -7,6 +7,7 @@ import com.xingsu.digital3c.vo.ProductDetailVo;
 import com.xingsu.digital3c.vo.ProductListVo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IProductService {
 
@@ -17,4 +18,6 @@ public interface IProductService {
     ServerResponse<List<ProductListVo>> getRecommendProduct();
 
     ServerResponse<List<ProductListVo>> getRecommendProductByUser();
+
+    Map getProductList(int pageNum, int pageSize);
 }

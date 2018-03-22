@@ -13,6 +13,9 @@ public class ProductListVo {
     private Integer status;
     private String imageHost;
 
+    private String statusDesc;
+
+
     public Integer getId() {
         return id;
     }
@@ -75,5 +78,13 @@ public class ProductListVo {
 
     public void setImageHost(String imageHost) {
         this.imageHost = imageHost;
+    }
+
+    public String getStatusDesc() {
+        return statusDesc;
+    }
+
+    public void setStatusDesc(String statusDesc) {
+        this.statusDesc = statusDesc;
     }
 }

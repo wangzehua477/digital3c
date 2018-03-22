@@ -4,6 +4,7 @@ package com.xingsu.digital3c.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.xingsu.digital3c.common.Const;
 import com.xingsu.digital3c.common.ResponseCode;
 import com.xingsu.digital3c.common.ServerResponse;
@@ -30,6 +31,7 @@ import java.io.FileInputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service("iProductService")
 public class ProductServiceImpl implements IProductService {
@@ -55,6 +57,9 @@ public class ProductServiceImpl implements IProductService {
         productListVo.setSubtitle(product.getSubtitle());
 
         productListVo.setStatus(product.getStatus());
+
+        productListVo.setStatusDesc(product.getStatus() == Const.ProductStatusEnum.ON_SALE.getCode() ?
+                Const.ProductStatusEnum.ON_SALE.getValue() :  Const.ProductStatusEnum.DROP_OFF.getValue());
 
         return productListVo;
 
@@ -148,6 +153,39 @@ public class ProductServiceImpl implements IProductService {
             productListVoList.add(productListVo);
         }
         return ServerResponse.createBySuccess(productListVoList);
+    }
+
+
+
+
+
+    // backend
+    @Override
+    public Map getProductList(int pageNum, int pageSize) {
+        //startPage -- start
+        //填充自己的sql查询逻辑
+        //pageHepler--收尾
+        PageHelper.startPage(pageNum, pageSize);
+        List<Product> productList = productMapper.selectList();
+
+        List<ProductListVo> productListVoList = Lists.newArrayList();
+        for (Product productItem : productList) {
+            ProductListVo productListVo = assembleProductListVo(productItem);
+            productListVoList.add(productListVo);
+        }
+
+        PageInfo pageResult = new PageInfo(productList);
+        pageResult.setList(productListVoList);
+        return assembleMap(pageResult);
+    }
+
+    private Map assembleMap(PageInfo pageResult) {
+        Map resultMap = Maps.newHashMap();
+
+        resultMap.put("data", pageResult.getList());
+        resultMap.put("total", pageResult.getTotal());
+        resultMap.put("status", 0);
+        return resultMap;
     }
 
     private ProductDetailVo assembleProductDetailVo(Product product) {

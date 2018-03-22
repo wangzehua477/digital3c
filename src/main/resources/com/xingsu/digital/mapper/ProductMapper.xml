@@ -203,4 +203,12 @@
     order by `count` desc
     limit 100
   </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from product
+    where status != 3
+    order by id asc
+  </select>
 </mapper>

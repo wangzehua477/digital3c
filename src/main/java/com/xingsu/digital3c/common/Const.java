@@ -30,7 +30,9 @@ public class Const {
     }
 
     public enum ProductStatusEnum {
-        ON_SALE(1, "在线");
+        ON_SALE(1, "在售"),
+        DROP_OFF(2, "下架"),
+        GIVE_UP(3, "废弃");
 
         private String value;
         private int code;
