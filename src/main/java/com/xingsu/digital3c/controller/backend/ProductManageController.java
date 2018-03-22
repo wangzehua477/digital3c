@@ -9,10 +9,7 @@ import com.xingsu.digital3c.service.IProductService;
 import com.xingsu.digital3c.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -75,5 +72,20 @@ public class ProductManageController {
         } else {
             return ServerResponse.createByErrorMessage("无权限操作");
         }
+    }
+
+    @RequestMapping(value = "del.do", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ServerResponse delProduct(HttpSession session, Integer productId){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if(user == null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        if(iUserService.checkAdminRole(user).isSuccess()){
+            return iProductService.delProduct(productId);
+        }else{
+            return ServerResponse.createByErrorMessage("无权限操作");
+        }
+
     }
 }

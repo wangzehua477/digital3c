@@ -197,6 +197,29 @@ public class ProductServiceImpl implements IProductService {
         return ServerResponse.createBySuccess(productDetailVo);
     }
 
+    @Override
+    public ServerResponse delProduct(Integer productId) {
+        if(productId == null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+
+        //商品要删除必须要先下架
+        Product product = productMapper.selectByPrimaryKey(productId);
+        if(product == null){
+            return ServerResponse.createByErrorMessage("该商品不存在！");
+        }
+        if(product.getStatus() <= Const.ProductStatusEnum.ON_SALE.getCode()){
+            return ServerResponse.createByErrorMessage("下架的商品才能删除");
+        }
+
+        int rowCount = productMapper.deleteByPrimaryKey(productId);
+        if(rowCount > 0){
+            return ServerResponse.createBySuccess("删除商品成功");
+        }
+
+        return ServerResponse.createByErrorMessage("删除商品失败");
+    }
+
     private Map assembleMap(PageInfo pageResult) {
         Map resultMap = Maps.newHashMap();
 

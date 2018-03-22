@@ -74,9 +74,17 @@
                     location.href = "productDetail.html?productId=" + data.id;
                 } else if(layEvent === 'del'){ //删除
                     layer.confirm('真的删除行么', function(index){
-                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                        layer.close(index);
                         //向服务端发送删除指令
+                        var ajaxUrl = "../../manage/product/del.do?productId=" + data.id;
+                        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.DELETE, function (result) {
+                            console.log(result)
+                            if(!result.success){
+                                layer.alert(result.msg, {icon:2});
+                            }else{
+                                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                layer.close(index);
+                            }
+                        },{forcedLogin: true});
                     });
                 } else if(layEvent === 'edit'){ //编辑
                     //do something
@@ -92,6 +100,12 @@
         });
 
 
+
+        function delProduct(ajaxUrl){
+            $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
+                return result.success;
+            },{forcedLogin: true});
+        }
     });
 
 </script>

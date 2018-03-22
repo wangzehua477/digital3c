@@ -22,4 +22,6 @@ public interface IProductService {
     Map getProductList(int pageNum, int pageSize);
 
     ServerResponse manageProductDetail(Integer productId);
+
+    ServerResponse delProduct(Integer productId);
 }
