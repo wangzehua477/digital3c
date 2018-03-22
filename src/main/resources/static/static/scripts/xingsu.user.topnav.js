@@ -1,18 +1,5 @@
 $(function () {
     "use strict";
-    //注册不被强制登陆的页面
-    var files = [];
-    files.push("index.html");
-    files.push("itemList.html");
-    files.push("login.html");
-    files.push("productDetail.html");
-    var matchFile = $utils.parseUrl(location.pathname).file;
-    var forcedLogin = true;
-    $.each(files, function (index, value) {
-        if(value == matchFile)
-            forcedLogin = false;
-    });
-    
     var str = "<nav class=\"navbar navbar-default\" role=\"navigation\" style='width: 1100px'>\n" +
         "        <div class=\"container-fluid\" style='background-color: #e3e4e5'>\n" +
         "            <div class=\"navbar-header\">\n" +
@@ -30,22 +17,8 @@ $(function () {
         "    </nav>";
     $("#topNav").html(str);
 
-    var ajaxUrl = "../../view/get_information.do";
+    var ajaxUrl = "../../user/get_information.do";
     $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
-        // if(result.status == 10){
-        //     if(forcedLogin){
-        //         layer.alert("登录后才能执行该操作!", {
-        //             icon: 2,
-        //             end: function () {
-        //                 location.href = "login.html";
-        //             }}
-        //         );
-        //         window.setTimeout(function () {
-        //             location.href = "login.html";
-        //         }, 3000);
-        //         return;
-        //     }
-        // }
         if(result.success) {
             $("#login").text("你好，" + result.data.username);
             $("#register").text("退出");
@@ -54,7 +27,7 @@ $(function () {
 
             $("#register").click(function () {
 
-                $ajax.ajax("../../view/logout.do", null, $config.HttpVerbs.POST, function (result) {
+                $ajax.ajax("../../user/logout.do", null, $config.HttpVerbs.POST, function (result) {
                     if(!result.success){
                         layer.alert("账户异常，请重试");
                         setTimeout(function () {
