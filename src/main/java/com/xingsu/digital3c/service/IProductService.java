@@ -20,4 +20,6 @@ public interface IProductService {
     ServerResponse<List<ProductListVo>> getRecommendProductByUser();
 
     Map getProductList(int pageNum, int pageSize);
+
+    ServerResponse manageProductDetail(Integer productId);
 }

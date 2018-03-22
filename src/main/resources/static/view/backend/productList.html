@@ -24,7 +24,9 @@
         <li class="layui-nav-item">
             <a href="orderList.html">订单管理</a>
         </li>
-
+        <li class="layui-nav-item layui-edge-right layui-layout-right">
+            <a href="login.html">登录</a>
+        </li>
     </ul>
 
 
@@ -54,7 +56,7 @@
             var table = layui.table;
             table.render({
                 elem: '#productTable'
-                ,url:'../../mange/product/list.do'
+                ,url:'../../manage/product/list.do'
                 ,where:{pageName: 'pageNum', limitName: 'pageSize'}
                 ,method:'get'
                 ,response: {
@@ -86,7 +88,7 @@
                 console.log(tr)
                 if(layEvent === 'detail'){ //查看
                     //do somehing
-                    location.href = "productDetail.html";
+                    location.href = "productDetail.html?productId=" + data.id;
                 } else if(layEvent === 'del'){ //删除
                     layer.confirm('真的删除行么', function(index){
                         obj.del(); //删除对应行（tr）的DOM结构，并更新缓存

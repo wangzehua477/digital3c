@@ -179,6 +179,24 @@ public class ProductServiceImpl implements IProductService {
         return assembleMap(pageResult);
     }
 
+    @Override
+    public ServerResponse manageProductDetail(Integer productId) {
+        if (productId == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+
+        Product product = productMapper.selectByPrimaryKey(productId);
+        if (product == null) {
+            return ServerResponse.createByErrorMessage("产品不存在");
+        }
+
+        //VO对象--value object
+        //pojo-->bo(business object) --> vo(view object)
+
+        ProductDetailVo productDetailVo = assembleProductDetailVo(product);
+        return ServerResponse.createBySuccess(productDetailVo);
+    }
+
     private Map assembleMap(PageInfo pageResult) {
         Map resultMap = Maps.newHashMap();
 
@@ -209,6 +227,11 @@ public class ProductServiceImpl implements IProductService {
             productDetailVo.setParentCategoryId(0);
         } else {
             productDetailVo.setParentCategoryId(category.getParentId());
+            productDetailVo.setCategoryName(category.getName());
+
+            //设置父类名字， 可以优化
+            Category category2 = categoryMapper.selectByPrimaryKey(category.getParentId());
+            productDetailVo.setParentCategoryName(category2.getName());
         }
 
         productDetailVo.setCreateTime(DateTimeUtil.dateToStr(product.getCreateTime()));

@@ -10,6 +10,7 @@ import com.xingsu.digital3c.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,8 +21,8 @@ import java.util.Map;
  * Created by 14195 on 2018/3/21.
  */
 @Controller
-@RequestMapping("/mange/product/")
-public class ProductMangeController {
+@RequestMapping("/manage/product/")
+public class ProductManageController {
 
     @Autowired
     private IUserService iUserService;
@@ -36,7 +37,7 @@ public class ProductMangeController {
      * @param pageSize
      * @return
      */
-    @RequestMapping("list.do")
+    @RequestMapping(value = "list.do",method = RequestMethod.GET)
     @ResponseBody
     public Map getList(HttpSession session, @RequestParam(value="pageNum", defaultValue = "1") int pageNum,
                        @RequestParam(value="pageSize", defaultValue = "10") int pageSize) {
@@ -53,6 +54,26 @@ public class ProductMangeController {
             resultMap.put("status", 1);
             resultMap.put("msg", "用户权限不足");
             return resultMap;
+        }
+    }
+
+    /**
+     * 获取商品详情
+     * @param session
+     * @param productId
+     * @return
+     */
+    @RequestMapping(value = "detail.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse getDetail(HttpSession session, Integer productId) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录后重试");
+        }
+        if (iUserService.checkAdminRole(user).isSuccess()) {
+            return iProductService.manageProductDetail(productId);
+        } else {
+            return ServerResponse.createByErrorMessage("无权限操作");
         }
     }
 }

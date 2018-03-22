@@ -21,6 +21,9 @@ public class ProductDetailVo {
     private String imageHost;
     private Integer parentCategoryId;
 
+    private String categoryName;
+    private String parentCategoryName;
+
     public Integer getId() {
         return id;
     }
@@ -131,5 +134,21 @@ public class ProductDetailVo {
 
     public void setParentCategoryId(Integer parentCategoryId) {
         this.parentCategoryId = parentCategoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getParentCategoryName() {
+        return parentCategoryName;
+    }
+
+    public void setParentCategoryName(String parentCategoryName) {
+        this.parentCategoryName = parentCategoryName;
     }
 }

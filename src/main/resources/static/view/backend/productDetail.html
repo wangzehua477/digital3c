@@ -24,9 +24,19 @@
         <li class="layui-nav-item">
             <a href="orderList.html">订单管理</a>
         </li>
+        <li class="layui-nav-item layui-edge-right layui-layout-right">
+            <a href="login.html">登录</a>
+        </li>
     </ul>
 
-    sssss
+    <div class="layui-form-label" style="width: 100%; text-align: left; margin-top: 20px">商品名称：<span id="productName"></span></div>
+    <div class="layui-form-label" style="width: 100%; text-align: left; margin-top: 20px">商品描述：<span id="subtitle"></span></div>
+    <div class="layui-form-label" style="width: 100%; text-align: left; margin-top: 20px">当前状态：<span id="status"></span></div>
+    <div class="layui-form-label" style="width: 100%; text-align: left; margin-top: 20px">所属分类：<span id="parentCategoryId"></span></div>
+    <div class="layui-form-label" style="width: 100%; text-align: left; margin-top: 20px">价格：<span id="price"></span></div>
+    <div class="layui-form-label" style="width: 100%; text-align: left; margin-top: 20px">库存：<span id="stock"></span></div>
+    <div class="layui-form-label" style="width: 100%; text-align: left; margin-top: 20px">商品图片：<span id="subImages"></span></div>
+    <div class="layui-form-label" style="width: 100%; text-align: left; margin-top: 20px">商品详情：<span id="detail"></span></div>
 
 </div>
 <script src="../../static/plugins/jQuery/jquery-1.12.1.min.js" type="text/javascript"></script>
@@ -42,7 +52,38 @@
 
 <script type="text/javascript">
     $(function () {
+        var urlObject = $utils.parseUrl(location.href);
+        var productId = urlObject.params["productId"];
+        var ajaxUrl = "../../manage/product/detail.do?productId=" + productId;
+        $utils.loading.start();
+        $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
+            $utils.loading.close();
+            console.log(result)
+            if(!result.success){
+                layer.alert(result.msg, {icon: 2});
+                return;
+            }
+            $("#productName").text(result.data.name);
+            $("#subtitle").text(result.data.subtitle);
+            $("#price").text(result.data.price);
+            $("#stock").text(result.data.stock);
+            $("#status").text(result.data.status == 1 ? "在售" : "已下架");
 
+            //商品详情
+            $("#detail").html(result.data.detail);
+
+            //商品图片
+            var image = result.data.subImages.split(",");
+            var imageStr = "<img src='{0}'style='width: 80px; height: 80px'/>"
+            var imageStrTemp = "";
+            $.each(image, function (index, value) {
+                imageStrTemp += String.format(imageStr, "../../product/getImage?imageName=" + value);
+            });
+            $("#subImages").html(imageStrTemp);
+
+            //所属分类
+            $("#parentCategoryId").text(result.data.parentCategoryName + "-" + result.data.categoryName);
+        },{forcedLogin: true});
     });
 
 </script>
