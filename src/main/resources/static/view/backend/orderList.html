@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <link href="../../static/plugins/layui/css/layui.css" rel="stylesheet" type="text/css"/>
-    <title>3C数码-后台登陆</title>
+    <title>3C数码-后台订单列表</title>
 </head>
 <body >
 <style>
@@ -14,8 +14,13 @@
     <div id="topNav"></div>
 
 
+    <table class="layui-hide" id="orderTable" lay-filter="productFilter"></table>
 
 </div>
+<script type="text/html" id="selectAndEditBar">
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="detail">发货</a>
+</script>
 <script src="../../static/plugins/jQuery/jquery-1.12.1.min.js" type="text/javascript"></script>
 <script src="../../static/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="../../static/scripts/xingsu.ajax.auth.js" type="text/javascript"></script>
@@ -26,8 +31,50 @@
 <script src="../../static/plugins/layui/layui.js" type="text/javascript"></script>
 <script src="../../static/scripts/xingsu.backend.topnav.js" type="text/javascript"></script>
 
+
 <script type="text/javascript">
     $(function () {
+        layui.use('table', function(){
+            var table = layui.table;
+            table.render({
+                elem: '#orderTable'
+                ,url:'../../manage/order/list.do'
+                ,where:{pageName: 'pageNum', limitName: 'pageSize'}
+                ,method:'get'
+                ,response: {
+                    statusName: 'status' //数据状态的字段名称，默认：code
+                    ,statusCode: 0 //成功的状态码，默认：0
+                    ,msgName: 'msg' //状态信息的字段名称，默认：msg
+                    ,countName: 'total' //数据总数的字段名称，默认：count
+                    ,dataName: 'data' //数据列表的字段名称，默认：data
+                }
+                ,cols: [[
+                    {field:'orderNo', width:140, title: '订单号', sort: true}
+                    ,{field:'receiverName', width:110, title: '收件人'}
+                    ,{field:'statusDesc', width:90, title: '订单状态'}
+                    ,{field:'payment', width:100, title: '订单总价', sort: true}
+                    ,{field:'createTime', width:180, title: '创建时间', sort: true}
+                    ,{fixed: 'right', width:120, align:'center', toolbar: '#selectAndEditBar'
+                        , title:'操作'}
+                ]]
+                ,page: true
+            });
+
+
+            //监听工具条
+            table.on('tool(productFilter)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+                console.log(data)
+                console.log(tr)
+                if(layEvent === 'detail'){ //查看
+                    //do somehing
+//                    location.href = "productDetail.html?productId=" + data.id;
+                }
+            });
+
+        });
 
 
     });

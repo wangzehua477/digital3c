@@ -323,6 +323,44 @@ public class OrderServiceImpl implements IOrderService{
         return ServerResponse.createByError();
     }
 
+
+    //backend
+
+    @Override
+    public Map manageList(int pageNum, int pageSize) {
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<Order> orderList = orderMapper.selectAllOrder();
+        List<OrderVo> orderVoList = this.assembleOrderVoList(orderList, null);
+        PageInfo pageResult = new PageInfo(orderList);
+        pageResult.setList(orderVoList);
+
+        return assembleMap(pageResult);
+    }
+
+    private Map assembleMap(PageInfo pageResult) {
+        Map resultMap = Maps.newHashMap();
+        resultMap.put("data", pageResult.getList());
+        resultMap.put("total", pageResult.getTotal());
+        resultMap.put("status", 0);
+        return resultMap;
+    }
+
+    @Override
+    public ServerResponse<OrderVo> manageDetail(Long orderNo) {
+        return null;
+    }
+
+    @Override
+    public ServerResponse<PageInfo> manageSearch(Long orderNo, int pageNum, int pageSize) {
+        return null;
+    }
+
+    @Override
+    public ServerResponse<String> manageSendGoods(Long orderNo) {
+        return null;
+    }
+
     // 简单打印应答
     private void dumpResponse(AlipayResponse response) {
         if (response != null) {
@@ -340,8 +378,8 @@ public class OrderServiceImpl implements IOrderService{
         for(Order order : orderList){
             List<OrderItem> orderItemList = Lists.newArrayList();
             if(userId == null){
-                //todo 管理员查询的时候，不需要传userId
-//                orderItemList = orderItemMapper.getByOrderNo(order.getOrderNo());
+                //管理员查询的时候，不需要传userId
+                orderItemList = orderItemMapper.getByOrderNo(order.getOrderNo());
             }else{
                 orderItemList = orderItemMapper.getByOrderNoUserId(order.getOrderNo(), userId);
             }

@@ -218,4 +218,10 @@
     from `order`
     where order_no = #{orderNo}
   </select>
+
+  <select id="selectAllOrder" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from `order`
+    order by create_time desc
+  </select>
 </mapper>

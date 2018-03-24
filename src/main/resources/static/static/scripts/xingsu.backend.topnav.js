@@ -10,10 +10,7 @@ $(function () {
 
     var matchFile = $utils.parseUrl(location.pathname).file;
     $.each($(".navLi"), function (index, value) {
-        console.log($(".navLi a").eq(index).attr("href"))
-        console.log(matchFile)
         if(matchFile == $(".navLi a").eq(index).attr("href")){
-            console.log(matchFile)
             $(this).addClass("layui-this");
             $(this).siblings().remove("layui-this");
         }
@@ -21,7 +18,6 @@ $(function () {
 
     var ajaxUrl = "../../user/get_information.do";
     $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
-        console.log(result)
         if(result.status == 10) {
             $("#navUl").append("<li class='layui-nav-item layui-edge-right layui-layout-right navLi' > <a href='login.html'>登录</a> </li>");
         }
