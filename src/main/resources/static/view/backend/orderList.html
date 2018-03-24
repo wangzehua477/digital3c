@@ -39,7 +39,10 @@
             table.render({
                 elem: '#orderTable'
                 ,url:'../../manage/order/list.do'
-                ,where:{pageName: 'pageNum', limitName: 'pageSize'}
+                ,request: {
+                    pageName: 'pageNum' //页码的参数名称，默认：page
+                    ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                }
                 ,method:'get'
                 ,response: {
                     statusName: 'status' //数据状态的字段名称，默认：code
@@ -70,7 +73,7 @@
                 console.log(tr)
                 if(layEvent === 'detail'){ //查看
                     //do somehing
-//                    location.href = "productDetail.html?productId=" + data.id;
+                    location.href = "orderDetail.html?orderNo=" + data.orderNo;
                 }
             });
 

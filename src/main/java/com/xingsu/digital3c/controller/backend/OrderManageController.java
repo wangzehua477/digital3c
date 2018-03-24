@@ -77,7 +77,7 @@ public class OrderManageController {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录后重试");
         }
         if (iUserService.checkAdminRole(user).isSuccess()) {
-            //填充我们增加的产品业务逻辑
+            //填充业务逻辑
             return iOrderService.manageDetail(orderNo);
         } else {
             return ServerResponse.createByErrorMessage("无权限操作");

@@ -348,7 +348,13 @@ public class OrderServiceImpl implements IOrderService{
 
     @Override
     public ServerResponse<OrderVo> manageDetail(Long orderNo) {
-        return null;
+        Order order = orderMapper.selectByOrderNo(orderNo);
+        if(order != null){
+            List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(orderNo);
+            OrderVo orderVo = assembleOrderVo(order, orderItemList);
+            return ServerResponse.createBySuccess(orderVo);
+        }
+        return ServerResponse.createByErrorMessage("订单不存在");
     }
 
     @Override

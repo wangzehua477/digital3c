@@ -133,6 +133,7 @@
         var resultTotal = -1;           //页面订单总条数
         var isFirst = true;             //是否第一次进入
         var currentLi = -1;             //当前的li
+        $utils.loading.start();
 
         var urlObject = $utils.parseUrl(location.href);
         var type = urlObject.params["type"] || null;
@@ -154,6 +155,7 @@
         if(type == "order"){
             $("#paging").removeClass("hidden");
             $(".itemUl li").eq(1).trigger("click");
+            $utils.loading.close();
         }
 
         if(currentUser.status == 10){
