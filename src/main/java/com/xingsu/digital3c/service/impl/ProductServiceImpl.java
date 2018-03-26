@@ -220,6 +220,34 @@ public class ProductServiceImpl implements IProductService {
         return ServerResponse.createByErrorMessage("删除商品失败");
     }
 
+    @Override
+    public ServerResponse saveOrUpdateProduct(Product product) {
+        if (product != null) {
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(product.getSubImages())) {
+                String[] subImageArray = product.getSubImages().split(",");
+                if (subImageArray.length > 0) {
+                    product.setMainImage(subImageArray[0]);
+                }
+            }
+
+            if (product.getId() != null) {
+                int rowCount = productMapper.updateByPrimaryKeySelective(product);
+                if (rowCount > 0) {
+                    return ServerResponse.createBySuccess("更新产品成功");
+                }
+                return ServerResponse.createBySuccess("更新产品失败");
+            } else {
+                int rowCount = productMapper.insert(product);
+                if (rowCount > 0) {
+                    return ServerResponse.createBySuccess("新增产品成功");
+                }
+                return ServerResponse.createBySuccess("新增产品失败");
+            }
+        }
+
+        return ServerResponse.createByErrorMessage("新增或更新产品参数不正确");
+    }
+
     private Map assembleMap(PageInfo pageResult) {
         Map resultMap = Maps.newHashMap();
 

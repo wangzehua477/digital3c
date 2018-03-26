@@ -3,6 +3,7 @@ package com.xingsu.digital3c.service;
 
 import com.github.pagehelper.PageInfo;
 import com.xingsu.digital3c.common.ServerResponse;
+import com.xingsu.digital3c.pojo.Product;
 import com.xingsu.digital3c.vo.ProductDetailVo;
 import com.xingsu.digital3c.vo.ProductListVo;
 
@@ -24,4 +25,6 @@ public interface IProductService {
     ServerResponse manageProductDetail(Integer productId);
 
     ServerResponse delProduct(Integer productId);
+
+    ServerResponse saveOrUpdateProduct(Product product);
 }

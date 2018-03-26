@@ -41,8 +41,8 @@
                 </ul>
             </div>
             <div style="overflow: hidden;">
-                <h4 style="margin-left: 15px">Apple iPhone 7 Plus (A1661) 128G 玫瑰金色 移动联通电信4G手机</h4>
-                <h5 style="margin-left: 15px; color: red; margin-bottom: 25px">iPhone 7，现更以红色呈现。</h5>
+                <h4 id="name" style="margin-left: 15px"></h4>
+                <h5 id="subtitle" style="margin-left: 15px; color: red; margin-bottom: 25px"></h5>
                 <div style="overflow: hidden; width: 98%; height: 47px; line-height: 0px; margin:0 auto; background-color: #e3e4e5;">
                     <p style="margin: 25px; color: grey">价格: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span id="price" style="color: #c60023; font-size: large"></span></p>
                 </div>
@@ -124,6 +124,9 @@
                     mouseChangeImage("subImage" + index, subImage);
                 });
             }
+
+            $("#name").text(result.data.name);
+            $("#subtitle").text(result.data.subtitle);
 
             //价格显示
             $("#price").text("￥" + result.data.price);
