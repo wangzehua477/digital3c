@@ -368,6 +368,10 @@ public class OrderServiceImpl implements IOrderService{
                 order.setSendTime(new Date());
                 orderMapper.updateByPrimaryKeySelective(order);
                 return ServerResponse.createBySuccess("发货成功");
+            }else if(order.getStatus() < Const.OrderStatusEnum.PAID.getCode()){
+                return ServerResponse.createByErrorMessage("订单处于未支付状态,仅支持先支付后发货");
+            }else{
+                return ServerResponse.createByErrorMessage("订单已发货");
             }
         }
         return ServerResponse.createByErrorMessage("订单不存在");
