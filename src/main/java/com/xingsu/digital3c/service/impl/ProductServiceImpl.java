@@ -248,6 +248,21 @@ public class ProductServiceImpl implements IProductService {
         return ServerResponse.createByErrorMessage("新增或更新产品参数不正确");
     }
 
+    @Override
+    public ServerResponse setSaleStatus(Integer productId, Integer status) {
+        if (productId == null || status == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        Product product = new Product();
+        product.setId(productId);
+        product.setStatus(status);
+        int rowCount = productMapper.updateByPrimaryKeySelective(product);
+        if (rowCount > 0) {
+            return ServerResponse.createBySuccess("修改商品销售状态成功");
+        }
+        return ServerResponse.createByErrorMessage("修改商品销售状态失败");
+    }
+
     private Map assembleMap(PageInfo pageResult) {
         Map resultMap = Maps.newHashMap();
 

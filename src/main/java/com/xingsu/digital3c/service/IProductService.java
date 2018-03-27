@@ -27,4 +27,6 @@ public interface IProductService {
     ServerResponse delProduct(Integer productId);
 
     ServerResponse saveOrUpdateProduct(Product product);
+
+    ServerResponse setSaleStatus(Integer productId, Integer status);
 }

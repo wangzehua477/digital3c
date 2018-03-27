@@ -37,10 +37,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by 14195 on 2018/3/16.
@@ -364,7 +361,16 @@ public class OrderServiceImpl implements IOrderService{
 
     @Override
     public ServerResponse<String> manageSendGoods(Long orderNo) {
-        return null;
+        Order order = orderMapper.selectByOrderNo(orderNo);
+        if(order != null){
+            if(order.getStatus() == Const.OrderStatusEnum.PAID.getCode()){
+                order.setStatus(Const.OrderStatusEnum.SHIPPED.getCode());
+                order.setSendTime(new Date());
+                orderMapper.updateByPrimaryKeySelective(order);
+                return ServerResponse.createBySuccess("发货成功");
+            }
+        }
+        return ServerResponse.createByErrorMessage("订单不存在");
     }
 
     // 简单打印应答
