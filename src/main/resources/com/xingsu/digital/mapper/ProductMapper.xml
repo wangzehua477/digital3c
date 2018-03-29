@@ -15,9 +15,15 @@
       <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="count" javaType="java.lang.Integer" jdbcType="TIMESTAMP" />
+      <arg column="count" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
   </resultMap>
+  
+  <resultMap id="partProductMap" type="java.util.HashMap">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER"/>
+  </resultMap>
+  
   <sql id="Base_Column_List">
     id, category_id, name, subtitle, main_image, sub_images, detail, price, stock, status, 
     create_time, update_time, `count`
@@ -26,7 +32,7 @@
     select 
     <include refid="Base_Column_List" />
     from product
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER} and status = 1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from product
@@ -210,5 +216,25 @@
     from product
     where status != 3
     order by id asc
+  </select>
+
+  <select id="selectProductByUser" resultMap="BaseResultMap" parameterType="int">
+    select `product`.id, category_id, `name`, subtitle, main_image, sub_images, detail, price, stock, status,
+    `product`.create_time, `product`.update_time, `count`
+    from `order_item` left join `product` on `order_item`.product_id = `product`.id
+    where user_id = #{userId} and status = 1
+  </select>
+
+  <select id="selectUserIdByProduct" resultType="int" parameterType="map">
+    select distinct user_id
+    from `product` left join `order_item` on `product`.id = `order_item`.product_id
+    where `product`.id = #{productId} and user_id != #{userId} and status = 1
+  </select>
+
+  <select id="selectRecommendProductByOtherUser" resultMap="BaseResultMap" resultType="int">
+    select distinct `product`.id, category_id, `name`, subtitle, main_image, sub_images, detail, price, stock, status,
+    `product`.create_time, `product`.update_time, `count`
+    from `order_item` left join `product` on `order_item`.product_id = `product`.id
+    where user_id = #{userId} and status = 1
   </select>
 </mapper>

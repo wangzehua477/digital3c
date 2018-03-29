@@ -205,4 +205,10 @@
     set password = #{passwordNew},salt=#{salt}, update_time = now()
     where username = #{username}
   </update>
+
+  <select id="selectUserBySha256Password" resultType="int"  parameterType="string">
+    select count(*)
+    from `user`
+    where password = #{sha256Password}
+  </select>
 </mapper>

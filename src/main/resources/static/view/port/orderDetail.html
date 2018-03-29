@@ -128,7 +128,7 @@
 
         var ajaxUrl = "../../order/detail.do?orderNo="+ orderNo;
         $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.GET, function (result) {
-            if(!result.success){
+            if (!result.success) {
                 console.log(result);
                 return;
             }
@@ -142,18 +142,21 @@
                 "<tr><td style='padding: 10px'>支付方式</td><td style='padding: 10px'>{4}</td></tr>" +
                 "<tr><td>" +
                 "<button id='pay' class='layui-btn layui-btn-normal layui-btn-sm hidden'>去支付</button>" +
+                "<button id='completeOrder' class='layui-btn layui-btn-normal layui-btn-sm hidden'>确认收货</button>" +
                 "<button id='cancelOrder' class='layui-btn layui-btn-normal layui-btn-sm hidden'>取消订单</button>" +
-                "</td><td></td></tr>>" ;
+                "</td><td></td></tr>>";
             var receiverAddressDetail = data.shippingVo.receiverProvince + data.shippingVo.receiverCity + data.shippingVo.receiverAddress + "&nbsp;" +
-                            data.shippingVo.receiverName + "收&nbsp;" + "手机号：" + data.shippingVo.receiverPhone;
+                data.shippingVo.receiverName + "收&nbsp;" + "手机号：" + data.shippingVo.receiverPhone;
             orderInfoStr = String.format(orderInfoStr, data.orderNo, data.createTime, receiverAddressDetail, data.statusDesc, data.paymentTypeDesc);
             $("#orderInfo").append(orderInfoStr);
 
             //如果订单未支付，显示按钮
-            if(data.status == 10){
+            if (data.status == 10) {
                 $("#pay").removeClass("hidden");
+            } else if (data.status == 40) {        //订单已发货状态，可以确认收货
+                $("#completeOrder").removeClass("hidden");
             }
-            if(data.status >= 10 && data.status <= 40){     //订单还未完成状态下，可以取消订单
+            if (data.status >= 10 && data.status <= 40) {     //订单还未完成状态下，可以取消订单
                 $("#cancelOrder").removeClass("hidden");
             }
 
@@ -180,9 +183,36 @@
 
             //取消订单按钮
             $("#cancelOrder").click(function () {
-               layer.alert("暂时不允许取消订单！", {icon: 5});
+                layer.alert("暂时不允许取消订单！", {icon: 5});
             });
-        }, {forcedLogin: true});
+
+            //完成订单按钮点击
+            $("#completeOrder").click(function () {
+                layer.prompt({title: '请输入密码，并确认', formType: 1}, function(pass, index){
+                    layer.close(index);
+                    var ajaxUrl = "../../order/complete_order.do?orderNo=" + orderNo + "&password=" + pass;
+                    $utils.loading.start();
+                    $ajax.ajax(ajaxUrl, null, $config.HttpVerbs.PUT, function (result) {
+                        $utils.loading.close();
+                        if (!result.success) {
+                            console.log(result);
+                            layer.alert(result.msg, {icon: 2});
+                            return;
+                        }
+                        layer.alert(result.data, {
+                            icon: 6, end: function () {
+                                location.reload();
+                            }
+                        });
+                        setTimeout(function () {
+                            location.reload();
+                        }, 3000);
+                    }, {forcedLogin: true});
+                });
+            });
+
+
+        });
 
 
         function init(){

@@ -97,6 +97,6 @@ public class ProductController {
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if(currentUser == null)
             return iProductService.getRecommendProduct();
-        return iProductService.getRecommendProductByUser();
+        return iProductService.getRecommendProductByUser(currentUser.getId());
     }
 }

@@ -18,7 +18,7 @@ public interface IProductService {
 
     ServerResponse<List<ProductListVo>> getRecommendProduct();
 
-    ServerResponse<List<ProductListVo>> getRecommendProductByUser();
+    ServerResponse<List<ProductListVo>> getRecommendProductByUser(Integer userId);
 
     Map getProductList(int pageNum, int pageSize);
 

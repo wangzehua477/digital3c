@@ -15,6 +15,7 @@ import com.xingsu.digital3c.common.ResponseCode;
 import com.xingsu.digital3c.common.ServerResponse;
 import com.xingsu.digital3c.pojo.User;
 import com.xingsu.digital3c.service.IOrderService;
+import com.xingsu.digital3c.util.Coder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,6 +111,23 @@ public class OrderController {
         }
 
         return iOrderService.getOrderDetail(currentUser.getId(), orderNo);
+    }
+
+    /**
+     * 确认收货功能
+     * @param session
+     * @param orderNo
+     * @return
+     */
+    @RequestMapping(value = "complete_order.do", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServerResponse<String> completeOrder(HttpSession session, Long orderNo, String password){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录后重试");
+        }
+        String sha256Password = Coder.sha256(password + user.getSalt());
+        return iOrderService.completeOrder(user.getId(), orderNo, sha256Password);
     }
 
     /**

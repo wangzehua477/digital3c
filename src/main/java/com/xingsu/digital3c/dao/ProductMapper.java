@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper
 public interface ProductMapper {
@@ -25,4 +26,10 @@ public interface ProductMapper {
     List<Product> selectRecommendProduct();
 
     List<Product> selectList();
+
+    List<Product> selectProductByUser(Integer userId);
+
+    Set<Integer> selectUserIdByProduct(@Param("productId") Integer id, @Param("userId") Integer userId);
+
+    Set<Product> selectRecommendProductByOtherUser(Integer userId);
 }

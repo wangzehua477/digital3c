@@ -19,10 +19,8 @@ import com.xingsu.digital3c.common.ServerResponse;
 import com.xingsu.digital3c.dao.*;
 import com.xingsu.digital3c.pojo.*;
 import com.xingsu.digital3c.service.IOrderService;
-import com.xingsu.digital3c.util.BigDecimalUtil;
-import com.xingsu.digital3c.util.DateTimeUtil;
-import com.xingsu.digital3c.util.FTPUtil;
-import com.xingsu.digital3c.util.PropertiesUtil;
+import com.xingsu.digital3c.service.IUserService;
+import com.xingsu.digital3c.util.*;
 import com.xingsu.digital3c.vo.OrderItemVo;
 import com.xingsu.digital3c.vo.OrderProductVo;
 import com.xingsu.digital3c.vo.OrderVo;
@@ -64,6 +62,9 @@ public class OrderServiceImpl implements IOrderService{
 
     @Autowired
     private PayInfoMapper payInfoMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public ServerResponse getOrderCartProduct(Integer userId) {
@@ -318,6 +319,24 @@ public class OrderServiceImpl implements IOrderService{
         }
 
         return ServerResponse.createByError();
+    }
+
+    @Override
+    public ServerResponse<String> completeOrder(Integer userId, Long orderNo, String sha256Password) {
+        Integer rowCount = userMapper.selectUserBySha256Password(sha256Password);
+        if(rowCount <= 0)
+            return ServerResponse.createByErrorMessage("密码错误");
+
+        Order order = orderMapper.selectByUserIdAndOrderNo(userId, orderNo);
+        if(order != null){
+            if(order.getStatus() == Const.OrderStatusEnum.SHIPPED.getCode()){
+                order.setStatus(Const.OrderStatusEnum.ORDER_SUCCESS.getCode());
+                order.setEndTime(new Date());
+                orderMapper.updateByPrimaryKeySelective(order);
+                return ServerResponse.createBySuccess("订单已完成交易");
+            }
+        }
+        return ServerResponse.createByErrorMessage("订单不存在");
     }
 
 

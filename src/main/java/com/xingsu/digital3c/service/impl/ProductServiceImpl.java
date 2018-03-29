@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.xingsu.digital3c.common.Const;
 import com.xingsu.digital3c.common.ResponseCode;
 import com.xingsu.digital3c.common.ServerResponse;
@@ -12,6 +13,7 @@ import com.xingsu.digital3c.dao.CategoryMapper;
 import com.xingsu.digital3c.dao.ProductMapper;
 import com.xingsu.digital3c.pojo.Category;
 import com.xingsu.digital3c.pojo.Product;
+import com.xingsu.digital3c.pojo.User;
 import com.xingsu.digital3c.service.ICategoryService;
 import com.xingsu.digital3c.service.IProductService;
 import com.xingsu.digital3c.util.DateTimeUtil;
@@ -32,6 +34,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service("iProductService")
 public class ProductServiceImpl implements IProductService {
@@ -143,15 +146,32 @@ public class ProductServiceImpl implements IProductService {
         return ServerResponse.createBySuccess(productListVoList);
     }
 
-    //todo  根据用户去推荐商品
+    //根据用户去推荐商品
     @Override
-    public ServerResponse<List<ProductListVo>> getRecommendProductByUser() {
-        List<Product> productList = productMapper.selectRecommendProduct();
-        List<ProductListVo> productListVoList = Lists.newArrayList();
-        for(Product product : productList){
-            ProductListVo productListVo = assembleProductListVo(product);
-            productListVoList.add(productListVo);
+    public ServerResponse<List<ProductListVo>> getRecommendProductByUser(Integer userId) {
+        if(userId == null)
+            getRecommendProduct();
+        //1. 得到该用户的所有购买商品的记录
+        List<Product> userProductList = productMapper.selectProductByUser(userId);
+        Set<Integer> RPUserSets = Sets.newHashSet();
+        for(Product product : userProductList){
+            //2. 得到买过该用户商品的所有用户
+            Set<Integer> userIdSets = productMapper.selectUserIdByProduct(product.getId(), userId);
+            RPUserSets.addAll(userIdSets);
         }
+        //3, 寻找那些用户购买过的商品，推荐给该用户
+        Set<Product> allRPProduct = Sets.newHashSet();
+        for(Integer i : RPUserSets){
+            Set<Product> userRPProduct = productMapper.selectRecommendProductByOtherUser(i);
+            allRPProduct.addAll(userRPProduct);
+        }
+
+        //转成前端所需要的数据
+        List<ProductListVo> productListVoList = Lists.newArrayList();
+        for(Product product : allRPProduct){
+            productListVoList.add(assembleProductListVo(product));
+        }
+
         return ServerResponse.createBySuccess(productListVoList);
     }
 
