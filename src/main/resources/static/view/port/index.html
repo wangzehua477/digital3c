@@ -45,13 +45,13 @@
                 <!-- 轮播（Carousel）项目 -->
                 <div class="carousel-inner">
                     <div class="item active">
-                        <img style="width:100%; height: 400px" src="../../static/images/oppo_red_test.jpg">
+                        <a><img class="carouselImg" style="width:100%; height: 400px" src="../../static/images/oppo_red_test.jpg"></a>
                     </div>
                     <div class="item">
-                        <img style="width:100%; height: 400px" src="../../static/images/iphonex_test.jpg" >
+                        <a><img class="carouselImg" style="width:100%; height: 400px" src="../../static/images/iphonex_test.jpg" ></a>
                     </div>
                     <div class="item">
-                        <img style="width:100%; height: 400px" src="../../static/images/huawei_test.jpg">
+                        <a><img class="carouselImg" style="width:100%; height: 400px" src="../../static/images/huawei_test.jpg"></a>
                     </div>
                 </div>
                 <!-- 轮播（Carousel）导航 -->
@@ -216,6 +216,8 @@
                     return false;
                 var image = "../../product/getImage?imageName=" + value.mainImage;
                 RPDivStrTemp += String.format(RPDivStr, image, value.subtitle, value.price, value.id);
+//                $(".carouselImg").eq(index).attr("src", image);
+
             });
             $("#RPDiv").append(RPDivStrTemp);
             if(result.data.length <= 0) {
